@@ -1,3 +1,4 @@
+#if的条件会根据bool(param)函数返回值判断不是布尔的数据的布尔值
 def build_person(first_name, last_name, age=''):
     """返回字典"""
     person = {'first_name': first_name, 'last_name': last_name}
