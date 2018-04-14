@@ -22,5 +22,4 @@ def greet_user():
             json.dump(username, f_obj)
             print("has been saved")
 
-
 greet_user()
