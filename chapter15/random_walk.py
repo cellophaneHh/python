@@ -11,7 +11,7 @@ class RandomWalk():
         self.x_values = [0]
         self.y_values = [0]
 
-    def get_step(direction, distance):
+    def get_step(self, direction, distance):
         #决定前进方向以及沿这个方向前进的距离
         c_direction = choice(direction)#随机从列表中取一个
         c_distance = choice(distance)
