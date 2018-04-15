@@ -21,9 +21,10 @@ edgecolor='none'
 #设置单一颜色
 c = 'red' #直接写颜色名称
 c = (0, 0.5, 0.8) #rgb
+
 #设置颜色映射
 c = y_values
-cmap = plt.cm.Blues
+cmap = plt.cm.cool
 
 plt.scatter(x_values, y_values, c=c, cmap=cmap, edgecolor=edgecolor, s=40)
 
@@ -39,7 +40,7 @@ plt.tick_params(axis='both', which='major', labelsize=14)
 plt.axis([0, 1100, 0, 1100000])
 
 #显示图表
-#plt.show()
+plt.show()
 
 #保存图表
-plt.savefig('squares_plot.png', bbox_inches='tight')
+#plt.savefig('squares_plot.png', bbox_inches='tight')
