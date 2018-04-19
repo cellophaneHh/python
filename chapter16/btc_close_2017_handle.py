@@ -43,6 +43,3 @@ idx_week = dates.index('2017-12-11')
 line_chart_week = draw_line(weeks[1:idx_week], closes[1:idx_week], "收盘价周日均值(￥)", "周日均值")
 line_chart_week
 
-
-
-

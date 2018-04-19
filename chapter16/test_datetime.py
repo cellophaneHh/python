@@ -1,5 +1,7 @@
 from datetime import datetime
 
-first_date = datetime.strptime('2018-04-16', '%Y-%m-%d')
+time = datetime.strptime('2016-10-10', '%Y-%m-%d')
 
-print(first_date)
+print(time)
+print(datetime.now())
+
