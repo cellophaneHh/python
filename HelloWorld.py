@@ -1,4 +1,5 @@
 import time
+import pygal
 
 print("Hello World!")
 

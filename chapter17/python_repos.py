@@ -1,5 +1,8 @@
 import requests
 
+import pygal
+from pygal.style import LightColorizedStyle as LCS, LightenStyle as ls
+
 # 执行API调用并存储响应
 url = 'https://api.github.com/repositories?q=language:python&sort=stars'
 r = requests.get(url)
@@ -10,6 +13,10 @@ response_dict = r.json()
 print(type(response_dict[0]))
 
 # 处理结果
-print(response_dict[0].keys())
-for key,value in response_dict[0].items():
-    print(key + '-' + str(value) + "\n")
+# print(response_dict[0].keys())
+# for key,value in response_dict[0].items():
+#     print(key + '-' + str(value) + "\n")
+
+names, stars = [], []
+for repo_data in response_dict:
+    names.append(repo_data['name'])
