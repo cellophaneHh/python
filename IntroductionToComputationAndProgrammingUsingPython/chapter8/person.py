@@ -31,7 +31,7 @@ class Person():
         return (datetime.date.today() - self.birthday).days
 
     def __lt__(self, other):
-        """如果self按字母顺序排在other前面，则返回True，否则返回False"""
+        """如果self按字母顺序排在other前面，则返回True，否则返回False, 重载了<运算符"""
         if self.lastName == other.lastName:
             return self.name < other.name
         return self.lastName < other.lastName
@@ -40,11 +40,20 @@ class Person():
         """返回全名"""
         return self.name
 
-me = Person('zh')
-him = Person('li')
-her = Person('wa')
-pring(him.)
+me = Person('Michael Guttag')
+him = Person('Barack Hussein Obama')
+her = Person('Madonna')
 
-"".capitalize
+print(him.getLastName())
+him.setBirthday(datetime.date(1961, 8, 4))
+her.setBirthday(datetime.date(1958, 8, 16))
+print(him.getName(), 'is', him.getAge(), 'days old')
 
-  print()
+
+pList = [me, him, her]
+for p in pList:
+    print(p)
+
+pList.sort()
+for p in pList:
+    print(p)
