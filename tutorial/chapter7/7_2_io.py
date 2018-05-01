@@ -25,4 +25,3 @@ print(f.read(1))
 # offset:3 代表偏移量  whence:2 定义从哪里开始便宜 0：文件头，1：当前位置 2：文件末尾
 print(f.seek(-3, 2)) # 这里是值从文件末尾(2)开始，偏移量为3
 print(f.read(1))
-

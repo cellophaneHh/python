@@ -11,15 +11,25 @@ class Mapping:
     def __init__(self, iterable):
         self.items_list = []
         self.__update(iterable)
+         # 不能这么写，这样的话子类调用是会调用到子类的同名方法，但是定义不同，会有错误
+        # self.update(iterable)
 
     def update(self, iterable):
         for item in iterable:
             self.items_list.append(item)
 
-    __update = update # 私有变量
+    __update = update # 私有变量，这个起到一个复制的作用，超类使用调用超类的方法
 
 class MappingSubclass(Mapping):
 
     def update(self, keys, values):
         for item in zip(keys, values):
             self.items_list.append(item)
+
+
+my_map = MappingSubclass([x for x in range(1, 10)])
+
+my_map.update([1], [2])
+
+print(my_map.items_list)
+

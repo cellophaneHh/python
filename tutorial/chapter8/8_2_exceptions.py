@@ -5,3 +5,5 @@ print(4 + spam*4)  # NameError
 print('2' + 2) # TypeError
 
 
+
+
