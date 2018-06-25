@@ -32,3 +32,30 @@ t1.join()
 t2.join()
 
 print("end.....")
+
+
+# 证明这个锁是不可重入的
+def show_recursion():
+    """
+    证明这个锁是不可重入的，即使是同一个线程多次进入
+    """
+    print("线程:" + threading.current_thread().getName() + ", 尝试获得锁..")
+    mutex = my_lock.acquire(timeout=5)
+    if not mutex:
+        print("线程:" + threading.current_thread().getName() + ", 尝试获得锁失败..")
+        return
+    print("线程:" + threading.current_thread().getName() + ", 获得锁..")
+    try:
+        print("递归调用.")
+        show_recursion()
+    finally:
+        print("线程:" + threading.current_thread().getName() + ", 释放锁..")
+        my_lock.release()
+
+
+t3 = threading.Thread(name='t3', target=show_recursion)
+
+t3.start()
+t3.join()
+
+print("t3 end....")
