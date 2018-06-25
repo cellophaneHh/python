@@ -18,5 +18,5 @@ for dir in dirs:
         if '.git' in subDirs:
             result = os.system('git pull origin master')
             print("更新结果", result)
-    except:
+    except Exception as e:
         print("异常", dir)
