@@ -49,3 +49,53 @@ list = [1,3,2]
 list.sort()
 print(list)
 print(sorted(list))
+
+print('===========str')
+print(('asdf ' 'asdf') == 'asdf asdf')
+print(str(b'Zoot!'))
+
+print('asdf'.capitalize())
+print('ASDFß'.casefold())  # 对unicode字符起效，变为小写
+print('ASDFß'.lower())  # 只对ascii字符起效，变为小写
+# 字符串asdf作为center，*号填充，总长度为6的字符串
+print('asdf'.center(6, '*'))
+
+print('aasdf'.count('a'))
+print('张恒asdf'.encode('utf-8'))
+print('asdf'.endswith('f'))
+# 替换tab为固定长度空格
+print('asdf\tlk;j;ljk\t'.expandtabs(4))
+
+print('{1}, {0}, {2}'.format('0', '1', '2'))
+
+print('asdf-'.isalnum())
+print('1234'.isdigit())
+print('  '.isspace())
+print('asdf'.join([';']))
+print('asdf'.partition('as'))
+print('asdfa'.replace('a', 'q', 1))
+print('asdfa'.rfind('a'))
+print('asdfa'.find('a'))
+print('asdfa'.upper())
+print('asdf'.zfill(5))
+
+print('%(language)s has %(number)03d quote types.' %
+      {'language': "Python", 'number': 2})
+
+v = memoryview(b'abcefg')
+print(v[1])
+print(v[-1])
+print(v[1:4])
+print(bytes(v[1:4]))
+
+s = [1, 2, 3, 4]
+print(s[::])
+print(s[::2])
+
+import array
+
+a = array.array('l', [-11111111, 22222222, -33333333, 44444444])
+m = memoryview(a)
+print(m[0])
+print(m[-1])
+print(m[::2].tolist())
