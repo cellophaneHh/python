@@ -2,4 +2,5 @@
 !.gitignore
 !.venv*
 *pycache*
+# requests测试使用的下载目录
 sources/
