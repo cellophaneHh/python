@@ -16,4 +16,3 @@ jar.set('gross_cookie', 'blech', domain='httpbin.org', path='/elsewhere')
 url = 'http://httpbin.org/cookies'
 r = requests.get(url, cookies=jar)
 print(r.text)
-
