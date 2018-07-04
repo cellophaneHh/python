@@ -4,3 +4,6 @@
 *pycache*
 # requests测试使用的下载目录
 sources/
+# html源码和下载的图片目录
+html/
+img/

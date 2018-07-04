@@ -7,3 +7,4 @@ try:
     print(r.status_code)
 except RequestException:
     print('异常')
+
