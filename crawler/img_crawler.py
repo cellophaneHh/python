@@ -11,6 +11,7 @@ import re
 # 定义源码目录
 _source_dir = './html'
 _img_dir = './img'
+_header = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0'}
 
 
 def init():
@@ -32,7 +33,7 @@ def download_html(url):
     file_path = _source_dir + os.path.sep + l_tmp[len(l_tmp) - 1]
     print("源码保存路径: {}".format(file_path))
     try:
-        r = requests.get(url)
+        r = requests.get(url, headers=_header)
         # 源码文件备份, win需要设置encoding，否则默认文件为gbk会导致编码错误
         with open(file_path, mode='w+', encoding='utf-8') as file:
             file.write(r.text)
@@ -125,12 +126,12 @@ def handle_img_url(img_urls):
 
 def download_and_save_img(img_url):
     """
-    根据链接下载病保存图片
+    根据链接下载并保存图片
     """
     file_name = os.path.split(img_url)[1]
     try:
         img_path = _img_dir + os.path.sep + file_name
-        img_response = requests.get(img_url)
+        img_response = requests.get(img_url, headers=_header)
         if img_response.status_code == 200:
             with open(img_path, 'wb') as img:
                 img.write(img_response.content)
