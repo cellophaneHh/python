@@ -5,14 +5,13 @@ import os
 
 parentDir = '/home/zh/Projects/'
 
-result = os.chdir(parentDir)
-print(result)
+os.chdir(parentDir)
 
 dirs = os.listdir()
 
-for dir in dirs:
-    os.chdir(parentDir + "/" + dir)
-    print("cwd:", dir)
+for d in dirs:
+    os.chdir(parentDir + "/" + d)
+    print("cwd:", d)
 
     subDirs = os.listdir()
     try:
@@ -20,4 +19,4 @@ for dir in dirs:
             result = os.system('git pull origin master')
             print("更新结果:", result)
     except Exception as e:
-        print("异常", dir, e)
+        print("异常", d, e)
