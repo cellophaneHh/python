@@ -1,4 +1,5 @@
 import math
+import array
 
 print('======math.trunc，保留整数部分，完全抛弃小数')
 print(math.trunc(11.1))
@@ -7,21 +8,20 @@ print('=========四舍五入')
 print(round(11.1))
 print(round(11.51))
 print('==========bitwise operation')
-print(0 | 1) # 或，存在1，为1， 其他为0
-print(0 & 1) # 与，两个都为1，为1，其他为0
-print(0 ^ 1 ) # 抑或，相同为0，其他为1
+print(0 | 1)  # 或，存在1，为1， 其他为0
+print(0 & 1)  # 与，两个都为1，为1，其他为0
+print(0 ^ 1)  # 抑或，相同为0，其他为1
 print(1 << 2)
 print(2 >> 1)
 
 print('====sequence')
-print('asdf' * 2) # 复制一个字符串
+print('asdf' * 2)  # 复制一个字符串
 seq = [0, 1, 2, 3, 4, 5]
-print(seq[0:1]) # 截取一个字符串，前闭后开区间
+print(seq[0:1])  # 截取一个字符串，前闭后开区间
 print(seq[1:3])
 print(seq[1:len(seq):2])
 print(len(seq))
 print(max(seq))
-print(min(seq))
 print(seq.index(1))
 
 seq.append(0)
@@ -45,12 +45,12 @@ print(seq)
 del seq[0]
 print(seq)
 
-list = [1,3,2]
+list = [1, 3, 2]
 list.sort()
 print(list)
 print(sorted(list))
 
-print('===========str')
+print('======:variables spell-checking-enable-by-default nil=====str')
 print(('asdf ' 'asdf') == 'asdf asdf')
 print(str(b'Zoot!'))
 
@@ -92,8 +92,6 @@ s = [1, 2, 3, 4]
 print(s[::])
 print(s[::2])
 
-import array
-
 a = array.array('l', [-11111111, 22222222, -33333333, 44444444])
 m = memoryview(a)
 print(m[0])
@@ -101,6 +99,8 @@ print(m[-1])
 print(m[::2].tolist())
 
 print("======True, False")
+
+
 class MyTask:
     """
     定义__bool__返回False或者__len__返回0
@@ -114,6 +114,7 @@ class MyTask:
 
     # def __len__(self):
     #     return 0
+
 
 mt = MyTask()
 print(bool(mt))
@@ -131,10 +132,12 @@ print(len(a))
 # 没有key时会抛出异常
 print(a['one'])
 
+
 # 在没有key时，如果不想抛出异常，需要在子类中定义__missing__函数
 class Counter(dict):
     def __missing__(self, key):
         return 0
+
 
 c = Counter()
 print(c['missing_key'])
@@ -179,6 +182,8 @@ print(type({'eggs'}))
 
 print("========Method")
 # 可以通过__func__给方法添加属性
+
+
 class C:
     def method(self):
         pass
@@ -187,9 +192,10 @@ class C:
 # c = C()
 # c.method.whoami = 'my name is method'
 
+
 # 使用func为方法加描述信息
 c = C()
-c.method.__func__.whoami = 'my name is method'
+c.method.__func__.whoami = 'my name is methodasdfl;asdflkjasdlfkjasldkjfl;\
+kjasdflkjasdlfkjlaskjdfl;kjasdflkjasdlfkjlaskjdfl阿斯蒂芬'
 print(c.method.__func__.whoami)
 print(c.method.whoami)
-

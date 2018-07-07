@@ -14,7 +14,8 @@ import random
 # 定义源码目录
 _source_dir = './html'
 _img_dir = './img'
-_headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+_headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) \
+Gecko/20100101 Firefox/61.0'}
 
 # 常量定义
 _IMG_SUFFIX_DEFAULT = '.jpg'

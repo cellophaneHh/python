@@ -14,7 +14,8 @@ import random
 # 定义源码目录
 _source_dir = './html'
 _img_dir = './img'
-_headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+_headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) \
+Gecko/20100101 Firefox/61.0'}
 
 # 常量定义
 _IMG_SUFFIX_DEFAULT = '.jpg'
@@ -46,7 +47,8 @@ def download_html(url):
     l_tmp = url.split('/')
     html_source_file_name = l_tmp[len(l_tmp) - 1]
     if not html_source_file_name:
-        html_source_file_name = str(get_timestamp()) + _HTML_SOURCE_SUFFIX_DEFAULT
+        html_source_file_name = str(get_timestamp()) +\
+                                    _HTML_SOURCE_SUFFIX_DEFAULT
     file_path = _source_dir + os.path.sep + html_source_file_name
     logger.info("源码保存路径: {}".format(file_path))
     try:
@@ -79,7 +81,8 @@ def get_img_urls(source_url, html_source, reg_img):
     # 只取第一个分组
     if isinstance(first_group, tuple):
         all_url = list(map(lambda tu: tu[0], all_url))
-    return list(map(relative_to_absolute, all_url, [source_url for i in range(len(all_url))]))
+    return list(map(relative_to_absolute, all_url,
+                    [source_url for i in range(len(all_url))]))
 
 
 def relative_to_absolute(relative_url, page_url):
@@ -162,7 +165,7 @@ def download_and_save_img(img_url):
         raise e
 
 
-def task_entry():
+def main():
     """
     采集入口
     """
@@ -179,4 +182,6 @@ def task_entry():
         # 处理链接
         handle_img_url(urls)
 
-task_entry()
+
+if __name__ == '__main__':
+    main()

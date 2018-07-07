@@ -1,9 +1,8 @@
-import os
+asdf = "asdfasdf asdfasdf"
 
-s = os.getcwd()
-print(s)
+print(asdf)
 
-print(os.path.join(s, 'home'))
+asdf = 'asdfasdf\
+        asdfasdf'
 
-ss = 'http://www.baidu.com'
-print(os.path.join(ss, 'adsf'))
+print(asdf)

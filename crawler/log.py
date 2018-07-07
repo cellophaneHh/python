@@ -9,7 +9,8 @@ import logging.handlers as handlers
 import sys
 import os
 
-# 日志输出格式: [INFO] [test.py:3] [2018-07-07 08:33:45,521] [asdf] [MainThread:139787199612736]
+# 日志输出格式: [INFO] [test.py:3] [2018-07-07 08:33:45,521]\
+#    [asdf] [MainThread:139787199612736]
 FORMAT = '[%(levelname)s] [%(filename)s:%(lineno)d] [%(asctime)s] [%(message)s] [%(threadName)s:%(thread)d]'
 FILE_ENCODING = "utf-8"
 
