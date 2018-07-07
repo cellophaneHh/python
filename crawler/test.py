@@ -1,4 +1,9 @@
-import random
+import os
 
-print(random.random() * 10)
-print(random.randint(1, 4))
+s = os.getcwd()
+print(s)
+
+print(os.path.join(s, 'home'))
+
+ss = 'http://www.baidu.com'
+print(os.path.join(ss, 'adsf'))

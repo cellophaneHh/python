@@ -99,3 +99,97 @@ m = memoryview(a)
 print(m[0])
 print(m[-1])
 print(m[::2].tolist())
+
+print("======True, False")
+class MyTask:
+    """
+    定义__bool__返回False或者__len__返回0
+    可以使对象被认为是False
+    """
+    def __init__(self):
+        pass
+
+    # def __bool__(self):
+    #     return False
+
+    # def __len__(self):
+    #     return 0
+
+mt = MyTask()
+print(bool(mt))
+
+print('===========dict')
+
+a = dict(one=1, two=2, three=3)
+b = {'one': 1, 'two': 2, 'three': 3}
+c = dict(zip(['one', 'two', 'three'], [1, 2, 3]))
+d = dict([('two', 2), ('one', 1), ('three', 3)])
+e = dict({'three': 3, 'one': 1, 'two': 2})
+print(a == b == c == d == e)
+
+print(len(a))
+# 没有key时会抛出异常
+print(a['one'])
+
+# 在没有key时，如果不想抛出异常，需要在子类中定义__missing__函数
+class Counter(dict):
+    def __missing__(self, key):
+        return 0
+
+c = Counter()
+print(c['missing_key'])
+print('missing_key' in c)
+
+# 根据key和value列表生成dict
+cc = dict.fromkeys(['1', '2', '3'])
+print(cc)
+# 可以设置key的默认值
+cc = dict.fromkeys(['1', 2, '3'], 'default')
+for item in cc.items():
+    print(item[0], item[1])
+for key in cc.keys():
+    print(key)
+
+dd = {}
+one = 'one'
+print(dd.setdefault(one, '10'))
+print(dd.setdefault('2'))
+print(dd)
+dd.update(dict(one=1))
+print(dd)
+
+if dd:
+    del dd
+
+dd = {'one': 1, 'two': 2}
+print(list(dd))
+print(list(dd.keys()))
+print(list(dd.values()))
+
+pairs = [(v, k) for (k, v) in dd.items()]
+print(pairs)
+
+
+keys = dd.keys()
+print(keys)
+# 与
+print(keys & {'eggs', 'one'})
+
+print(type({'eggs'}))
+
+print("========Method")
+# 可以通过__func__给方法添加属性
+class C:
+    def method(self):
+        pass
+
+# 下面这种方式添加method属性会报错
+# c = C()
+# c.method.whoami = 'my name is method'
+
+# 使用func为方法加描述信息
+c = C()
+c.method.__func__.whoami = 'my name is method'
+print(c.method.__func__.whoami)
+print(c.method.whoami)
+
