@@ -1,4 +1,4 @@
-li = [('1', '2'), ('3', 4)]
+import random
 
-a_li = map(lambda x: x[0], li)
-print(list(a_li))
+print(random.random() * 10)
+print(random.randint(1, 4))

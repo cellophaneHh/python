@@ -9,3 +9,4 @@ html/
 img/
 # pycharm虚拟环境
 venv/
+log/
