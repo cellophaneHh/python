@@ -1,0 +1,5 @@
+
+- [[file:crawler/log.py][log.py]] 日志模块，配置了日志打印和文件写出
+
+- [[file:crawler/ituring_homepage_thumbnail.py][ituring_homepage_thumbnail.py]] 爬取图灵社区首页书籍缩略图
+
