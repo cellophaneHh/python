@@ -40,7 +40,7 @@ print(seq)
 seq.pop()
 print(seq)
 
-print(seq.remove(11))
+# print(seq.remove(11))  # pop之后元素不存在会报错ValueError
 print(seq)
 del seq[0]
 print(seq)
@@ -195,7 +195,8 @@ class C:
 
 # 使用func为方法加描述信息
 c = C()
-c.method.__func__.whoami = 'my name is methodasdfl;asdflkjasdlfkjasldkjfl;\
-kjasdflkjasdlfkjlaskjdfl;kjasdflkjasdlfkjlaskjdfl阿斯蒂芬'
+c.method.__func__.whoami = ('my name is methodasdfl;asdflkjasdlfkjasldkjfl;'
+                            'kjasdflkjasdlfkjlaskjdfl;'
+                            'kjasdflkjasdlfkjlaskjdfl阿斯蒂芬')
 print(c.method.__func__.whoami)
 print(c.method.whoami)

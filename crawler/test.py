@@ -2,7 +2,7 @@ asdf = "asdfasdf asdfasdf"
 
 print(asdf)
 
-asdf = 'asdfasdf\
-        asdfasdf'
+asdf = ('asdfasdf '
+        'asdfasdf')
 
 print(asdf)
