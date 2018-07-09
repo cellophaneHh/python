@@ -6,7 +6,7 @@
 
 import requests
 import os
-import re
+import re_cases
 from log import logger
 import time
 import random
@@ -71,7 +71,7 @@ def get_img_urls(source_url, html_source, reg_img):
     if not source_url or not html_source:
         return
 
-    all_url = re.findall(reg_img, html_source)
+    all_url = re_cases.findall(reg_img, html_source)
 
     if not all_url:
         return
