@@ -13,3 +13,8 @@ print(template.substitute(values))
 
 print('%s----%d' % ('1', 21))
 print('%(name)s %(address)s' % {'name': 'asdf', 'address': 'asdf'})
+
+print("%(name)s" % {'name': '%号进行字符串格式化'})
+print("{name}".format(name="str.format进行字符串格式化"))
+name = 'f进行字符串格式化'
+print(f"{name}")
