@@ -1,5 +1,6 @@
 from difflib import SequenceMatcher
 
+
 def show_results(match):
     print(' a   = {}'.format(match.a))
     print(' b   = {}'.format(match.b))
@@ -7,6 +8,7 @@ def show_results(match):
     i, j, k = match
     print(' A[a:a+size] = {!r}'.format(A[i:i+k]))
     print(' B[b:b+size] = {!r}'.format(B[j:j + k]))
+
 
 A = ' abcd'
 B = 'abcd abcd'
