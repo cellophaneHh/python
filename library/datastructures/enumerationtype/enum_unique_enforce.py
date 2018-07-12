@@ -15,6 +15,6 @@ class BugStatus(enum.Enum):
     in_progress = 3
     fix_committed = 2
     fix_released = 1
-    # 加enum.unique之后不能重复定义
+    # 加enum.unique之后不能重复定义，会报错
     by_design = 4
     closed = 1
