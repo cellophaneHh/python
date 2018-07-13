@@ -6,7 +6,7 @@
 
 import requests
 import os
-import re_cases
+import re
 from log import logger
 import time
 import random
@@ -47,7 +47,8 @@ def download_html(url):
     l_tmp = url.split('/')
     html_source_file_name = l_tmp[len(l_tmp) - 1]
     if not html_source_file_name:
-        html_source_file_name = str(get_timestamp()) + _HTML_SOURCE_SUFFIX_DEFAULT
+        html_source_file_name = (str(get_timestamp())
+                                 + _HTML_SOURCE_SUFFIX_DEFAULT)
     file_path = _source_dir + os.path.sep + html_source_file_name
     logger.info("源码保存路径: {}".format(file_path))
     try:
@@ -62,15 +63,14 @@ def download_html(url):
         logger.error('保存源码异常: {}'.format(url), e)
 
 
-def get_img_urls(source_url, html_source, reg_img):
+def get_urls(source_url, html_source, pattern):
     """
-    根据源码提取图片链接
-    :return 存放图片链接的可迭代类型
+    根据正则提取url
     """
     if not source_url or not html_source:
         return
 
-    all_url = re_cases.findall(reg_img, html_source)
+    all_url = pattern.findall(html_source)
 
     if not all_url:
         return
@@ -80,7 +80,25 @@ def get_img_urls(source_url, html_source, reg_img):
     # 只取第一个分组
     if isinstance(first_group, tuple):
         all_url = list(map(lambda tu: tu[0], all_url))
-    return list(map(relative_to_absolute, all_url, [source_url for i in range(len(all_url))]))
+    return list(map(relative_to_absolute, all_url,
+                    [source_url for i in range(len(all_url))]))
+
+
+def get_contents(html_source, pattern):
+    """
+    根据正则提取内容，和get_urls不同的是不需要相对url转绝对url
+    """
+    contents = pattern.findall(html_source)
+
+    if not contents:
+        return
+
+    # 取第一个元素判断结果是否是元组(正则中存在多个分组)
+    first_group = contents[0]
+    # 只取第一个分组
+    if isinstance(first_group, tuple):
+        all_content = list(map(lambda tu: tu[0], contents))
+    return list(all_content)
 
 
 def relative_to_absolute(relative_url, page_url):
@@ -101,6 +119,11 @@ def relative_to_absolute(relative_url, page_url):
         page_url = os.path.split(page_url)[0]
 
     url_list = page_url.replace(http_prefix, "").split("/")
+    # 不是以. 和.. 开头的url，直接以/开头的url，从域名开始算起
+    if relative_url.startswith('/'):
+        url_concat = http_prefix + url_list[0] + "/" + relative_url
+        return url_concat
+
     relative_url_final = ''
     # 标记是否继续处理.和..
     last_flag = True
@@ -112,7 +135,6 @@ def relative_to_absolute(relative_url, page_url):
         else:
             relative_url_final += item + '/'
             last_flag = False
-
     # 拼接
     url_final = ''
     for l in url_list:
@@ -139,7 +161,7 @@ def handle_img_url(img_urls):
                 logger.error("下载失败: {}".format(img_url), e)
             finally:
                 # 每次随机停止1~4秒再处理下一个
-                time.sleep(random.randint(1, 4))
+                time.sleep(random.randint(2, 5))
     else:
         logger.warn("图片链接为空!")
 
@@ -157,13 +179,15 @@ def download_and_save_img(img_url):
         if img_response.status_code == 200:
             with open(img_path, 'wb') as img:
                 img.write(img_response.content)
-        logger.info('保存成功:{0}, {1}'.format(file_name, img_url))
+            logger.info('保存成功: {0}, {1}, {2}'.format(img_path, file_name, img_url))
+        else:
+            logger.warn('下载失败: {0}, {1}'.format(img_response.status_code, img_url))
     except requests.RequestException as e:
-        logger.error('保存失败:{0}, {1}'.format(file_name, img_url))
+        logger.error('保存失败: {0}'.format(img_url))
         raise e
 
 
-def task():
+def execute():
     """
     采集入口
     """
@@ -171,22 +195,24 @@ def task():
     init()
 
     # 下载网页
+    homepage_url = 'http://www.beautylegmm.com/'
+    # 1. 下载概览页，获取所有细览页地址
+    homepage_source = download_html(homepage_url)
+    detail_url_pattern = re.compile('<div class="post_weidaopic">[\s\S]*?<a href="(.*?)"')
+    detail_urls = get_urls(homepage_url, homepage_source, detail_url_pattern)
+    if detail_urls:
+        img_url_pattern = re.compile('<a href="(.*?.jpg)"')
+        for detail_url in detail_urls:
+            detail_source = download_html(detail_url)
+            # TODO 翻页
+            img_urls = get_urls(detail_url, detail_source, img_url_pattern)
+            if img_urls:
+                handle_img_url(img_urls)
+            else:
+                print('没有图片url匹配: {}'.format(detail_url))
+                continue
+    else:
+        print('没有匹配')
 
-    # # requests首页
-    # source_url = 'http://docs.python-requests.org/zh_CN/latest/index.html'
-    # # 提取logo和另外一张图
-    # reg_img = r'<img.*?src="([^"]+?(png|jpg))".*?/>'
 
-    # 图灵社区首页
-    source_url = 'http://www.ituring.com.cn/'
-    reg_img = r'<img src="(.*?)".*?>'
-    source = download_html(source_url)
-
-    if source:
-        # 解析链接
-        urls = get_img_urls(source_url, source, reg_img)
-        print(urls[0:10])
-        # 处理链接
-        handle_img_url(urls)
-
-task()
+execute()

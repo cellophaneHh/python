@@ -49,8 +49,10 @@ def get_log_path():
     获取日志路径
     :return: 日志文件路径
     """
-    log_path = os.path.join(os.getcwd(), "/log")
+    log_path = os.path.join(os.getcwd(), 'log')
+    print('log path: {}'.format(log_path))
     if not os.path.exists(log_path):
+        print('不存在，新建')
         os.mkdir(log_path)
     return os.path.join(log_path, 'crawler_log.log')
 
