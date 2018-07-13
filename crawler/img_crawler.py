@@ -155,12 +155,12 @@ def handle_img_url(img_urls):
     if img_urls:
         for img_url in img_urls:
             try:
-                logger.info('开始下载: {0}'.format(img_url))
+                logger.info('开始下载: {}'.format(img_url))
                 download_and_save_img(img_url)
             except requests.RequestException as e:
                 logger.error("下载失败: {}".format(img_url), e)
             finally:
-                # 每次随机停止1~4秒再处理下一个
+                # 每次随机停止2~秒再处理下一个
                 time.sleep(random.randint(2, 5))
     else:
         logger.warn("图片链接为空!")
@@ -179,12 +179,11 @@ def download_and_save_img(img_url):
         if img_response.status_code == 200:
             with open(img_path, 'wb') as img:
                 img.write(img_response.content)
-            logger.info('保存成功: {0}, {1}, {2}'.format(img_path, file_name, img_url))
+            logger.info('保存成功: {0}, {1}'.format(img_path, img_url))
         else:
             logger.warn('下载失败: {0}, {1}'.format(img_response.status_code, img_url))
     except requests.RequestException as e:
-        logger.error('保存失败: {0}'.format(img_url))
-        raise e
+        logger.error('保存失败: {0}'.format(img_url), e)
 
 
 def execute():
