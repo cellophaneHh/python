@@ -160,8 +160,8 @@ def handle_img_url(img_urls):
             except requests.RequestException as e:
                 logger.error("下载失败: {}".format(img_url), e)
             finally:
-                # 每次随机停止2~秒再处理下一个
-                time.sleep(random.randint(2, 5))
+                # 每次随机停止3~8秒再处理下一个
+                time.sleep(random.randint(3, 8))
     else:
         logger.warn("图片链接为空!")
 
