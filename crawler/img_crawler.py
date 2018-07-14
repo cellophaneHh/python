@@ -200,7 +200,6 @@ def execute():
     # 1.1. 获得第一页的目录入口链接
     detail_url_pattern = re.compile(('<div class="post_weidaopic">[\s\S]*?<a href="(.*?)"'))
     detail_urls = get_urls(homepage_url, homepage_source, detail_url_pattern)
-    logger.info('detail_urls: ', detail_urls)
     # 1.2 收集其他页的目录入口链接
     next_page_pattern = re.compile('<a href="([^"]*?)">下一页</a>')
     get_next_page_urls(homepage_url, homepage_source, next_page_pattern,
