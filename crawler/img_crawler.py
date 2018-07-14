@@ -206,7 +206,7 @@ def execute():
                        detail_url_pattern, detail_urls)
     logger.info('所有细览页链接个数: {}'.format(len(detail_urls)))
     # 2. 处理所有细览页
-    if not detail_urls:
+    if detail_urls:
         logger.info('细览页个数: {0}'.format(len(detail_urls)))
         img_url_pattern = re.compile('<a href="(.*?.jpg)"')
         next_page_pattern = re.compile('<a class="next" href="(.*?)">下一页</a>')
