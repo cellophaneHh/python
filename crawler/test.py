@@ -1,8 +1,4 @@
-asdf = "asdfasdf asdfasdf"
+l = [1, 2, 3]
 
-print(asdf)
-
-asdf = ('asdfasdf '
-        'asdfasdf')
-
-print(asdf)
+l[len(l):len(l)] = [12,3,4]
+print(l)

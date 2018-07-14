@@ -14,8 +14,8 @@ import random
 # 定义源码目录
 _source_dir = './html'
 _img_dir = './img'
-_headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) \
-Gecko/20100101 Firefox/61.0'}
+_headers = {'user-agent': ('Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) '
+                           'Gecko/20100101 Firefox/61.0')}
 
 # 常量定义
 _IMG_SUFFIX_DEFAULT = '.jpg'
@@ -50,16 +50,18 @@ def download_html(url):
         html_source_file_name = (str(get_timestamp())
                                  + _HTML_SOURCE_SUFFIX_DEFAULT)
     file_path = _source_dir + os.path.sep + html_source_file_name
-    logger.info("源码保存路径: {}".format(file_path))
     try:
         r = requests.get(url, headers=_headers)
         # 源码文件备份, win需要设置encoding，否则默认文件为gbk会导致编码错误
         with open(file_path, mode='w+', encoding='utf-8') as file:
             file.write(r.text)
+        logger.info("源码保存路径: {}".format(file_path))
         return r.text
     except requests.RequestException as e:
         logger.error('下载源码异常: {}'.format(url), e)
     except UnicodeEncodeError as e:
+        logger.error('保存源码异常: {}'.format(url), e)
+    except UnicodeError as e:
         logger.error('保存源码异常: {}'.format(url), e)
 
 
@@ -154,14 +156,9 @@ def handle_img_url(img_urls):
     """
     if img_urls:
         for img_url in img_urls:
-            try:
-                logger.info('开始下载: {}'.format(img_url))
-                download_and_save_img(img_url)
-            except requests.RequestException as e:
-                logger.error("下载失败: {}".format(img_url), e)
-            finally:
-                # 每次随机停止3~8秒再处理下一个
-                time.sleep(random.randint(3, 8))
+            download_and_save_img(img_url)
+            # 隔几秒下一次
+            time.sleep(random.randint(3, 5))
     else:
         logger.warn("图片链接为空!")
 
@@ -179,10 +176,13 @@ def download_and_save_img(img_url):
         if img_response.status_code == 200:
             with open(img_path, 'wb') as img:
                 img.write(img_response.content)
-            logger.info('保存成功: {0}, {1}'.format(img_path, img_url))
+            logger.info('下载成功: {0}, {1}'.format(img_path, img_url))
         else:
-            logger.warn('下载失败: {0}, {1}'.format(img_response.status_code, img_url))
+            logger.warn('下载失败: {0}, {1}'.format(
+                        img_response.status_code, img_url))
     except requests.RequestException as e:
+        logger.error('保存失败: {0}'.format(img_url), e)
+    except UnicodeError as e:
         logger.error('保存失败: {0}'.format(img_url), e)
 
 
@@ -195,23 +195,68 @@ def execute():
 
     # 下载网页
     homepage_url = 'http://www.beautylegmm.com/'
-    # 1. 下载概览页，获取所有细览页地址
+    # 1. 下载首页源码
     homepage_source = download_html(homepage_url)
-    detail_url_pattern = re.compile('<div class="post_weidaopic">[\s\S]*?<a href="(.*?)"')
+    # 1.1. 获得第一页的目录入口链接
+    detail_url_pattern = re.compile(('<div class="post_weidaopic">[\s\S]*?<a href="(.*?)"'))
     detail_urls = get_urls(homepage_url, homepage_source, detail_url_pattern)
-    if detail_urls:
+    logger.info('detail_urls: ', detail_urls)
+    # 1.2 收集其他页的目录入口链接
+    next_page_pattern = re.compile('<a href="([^"]*?)">下一页</a>')
+    get_next_page_urls(homepage_url, homepage_source, next_page_pattern,
+                       detail_url_pattern, detail_urls)
+    logger.info('所有细览页链接个数: {}'.format(len(detail_urls)))
+    # 2. 处理所有细览页
+    if not detail_urls:
+        logger.info('细览页个数: {0}'.format(len(detail_urls)))
         img_url_pattern = re.compile('<a href="(.*?.jpg)"')
+        next_page_pattern = re.compile('<a class="next" href="(.*?)">下一页</a>')
         for detail_url in detail_urls:
+            img_url_all = []
             detail_source = download_html(detail_url)
-            # TODO 翻页
+            # 图片链接
             img_urls = get_urls(detail_url, detail_source, img_url_pattern)
             if img_urls:
-                handle_img_url(img_urls)
+                logger.info('采集到图片链接: {0}'.format(len(img_urls)))
+                # handle_img_url(img_urls)
+                len_img_url_all = len(img_url_all)
+                img_url_all[len_img_url_all:len_img_url_all] = img_urls
             else:
-                print('没有图片url匹配: {}'.format(detail_url))
+                logger.info('没有图片url匹配: {}'.format(detail_url))
                 continue
+            # 翻页链接
+            get_next_page_urls(detail_url, detail_source, next_page_pattern,
+                               img_url_pattern, img_url_all)
+            logger.info('图片链接数: {0}'.format(len(img_url_all)))
+            handle_img_url(img_url_all)
+        logger.info("爬取正常结束。")
     else:
-        print('没有匹配')
+        print('没有匹配,爬取结束。')
+
+
+def get_next_page_urls(root_url, html_source, next_page_pattern,
+                       url_pattern, urls):
+    """
+    获取下一页链接
+    """
+    next_page_urls = get_urls(root_url, html_source, next_page_pattern)
+    if next_page_urls:
+        logger.info('下一页: {0}'.format(next_page_urls))
+        next_page_url = next_page_urls[0]
+        next_page_source = download_html(next_page_url)
+        next_page_urls = get_urls(next_page_url, next_page_source,
+                                  url_pattern)
+        if next_page_urls:
+            logger.info('采集到链接: {0}'.format(len(next_page_urls)))
+            len_img_urls = len(urls)
+            urls[len_img_urls:len_img_urls] = next_page_urls
+            time.sleep(random.randint(1, 4))
+            get_next_page_urls(next_page_url, next_page_source,
+                               next_page_pattern, url_pattern, urls)
+        else:
+            logger.info('没有url匹配: {}'.format(next_page_url))
+    else:
+        logger.info('翻页完成。')
 
 
 execute()
