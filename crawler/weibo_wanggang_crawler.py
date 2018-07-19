@@ -4,7 +4,7 @@ import time
 # 王刚微博主页链接
 url = 'https://weibo.com/p/1005052804506181/home?from=page_100505_profile&wvr=6&mod=data&is_all=1#place'
 
-session = requests.session();
+session = requests.session()
 session.headers["user-agent"] = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) '
                                  'Gecko/20100101 Firefox/61.0')
 session.headers['cookie'] = ('YF-V5-G0=73b58b9e32dedf309da5103c77c3af4f; SUBP=0033WrS'
