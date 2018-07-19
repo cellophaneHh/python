@@ -22,6 +22,7 @@ print('Now:', now)
 parsed = time.strptime(now)
 print('\nParsed:')
 show_struct(parsed)
+print(type(parsed))
 
 print('\nFormatted:',
       time.strftime('%Y-%m-%d %H:%M:%S'), parsed)
