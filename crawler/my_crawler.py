@@ -41,7 +41,7 @@ def get_timestamp():
     return round(time.time() * 1000)
 
 
-def download_html(url):
+def download_html(url, generate_name=False):
     '''
     根据url下载网页源码
     '''
@@ -50,7 +50,7 @@ def download_html(url):
 
     l_tmp = url.split('/')
     html_source_file_name = l_tmp[len(l_tmp) - 1]
-    if not html_source_file_name:
+    if generate_name or not html_source_file_name:
         html_source_file_name = (str(get_timestamp())
                                  + _HTML_SOURCE_SUFFIX_DEFAULT)
     file_path = _source_dir + os.path.sep + html_source_file_name
