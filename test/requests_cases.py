@@ -1,24 +1,14 @@
 import requests
-import json
-#
-url = 'http://localhost:8080/web/requestBody'
-# url = "http://httpbin.org/post"
-session = requests.session()
-data = {'name': '1', 'address': '2'}
-print(type(data))
-print(type(json.dumps(data)))
-response = session.post(url=url, headers={'content-type': 'application/json;charset=UTF-8'},
-                        data=json.dumps(data))
-if response.status_code == 200:
-    print(response.json())
-else:
-    print(response.status_code, end=' ')
-    print(response.reason)
-print("content-type: {}".format(response.headers['content-type']))
 
+url = 'http://localhost:8080/schedule/task/delete'
 
-def show(num) -> (int, None):
-    print(num)
+params = {
+    'authId': '4ED5D140882CD5BA2116C3020C8AB530',
+    'targetVolume': 'app_20160726094256',
+    'applyType': '0',
+    'ids': 'b6219c62-19f4-493c-8',
+}
 
-
-show(10)
+r = requests.get(url, params=params)
+print(r.status_code)
+print(r.json())
