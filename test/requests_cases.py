@@ -1,11 +1,11 @@
 import requests
 
-url = 'http://localhost:8080/HappyServer/schedule/task/listAll'
+url = 'http://localhost:8080/HappyServer/schedule/task/calculateValueTree'
 
 params = {
-    'authId': '9742D34D2A3B743A70C9D64EA60605B7',
+    'authId': 'B80CA686AA5E21E1ABD1A518A521B4B4',
     'targetVolume': 'YYGL',
-    'applyType': '8',
+    # 'applyType': '8',
     # 'parentId': 'DISPATCH_TASK',
     # 'fileTypes': '-',
     # 'resultType': 'json'
@@ -13,7 +13,6 @@ params = {
 
 r = requests.get(url, params=params)
 if r.status_code == 200:
-    print(r.headers['content-type'])
     print(r.text)
 else:
     print("status_code: {}, reason: {}".format(r.status_code, r.reason))
