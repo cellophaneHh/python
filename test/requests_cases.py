@@ -1,14 +1,18 @@
 import requests
 
-url = 'http://localhost:8080/schedule/task/delete'
+url = 'http://localhost:8080/HappyServer/schedule/task/calculateValueTree'
 
 params = {
-    'authId': '4ED5D140882CD5BA2116C3020C8AB530',
-    'targetVolume': 'app_20160726094256',
-    'applyType': '0',
-    'ids': 'b6219c62-19f4-493c-8',
+    'authId': 'B80CA686AA5E21E1ABD1A518A521B4B4',
+    'targetVolume': 'YYGL',
+    # 'applyType': '8',
+    # 'parentId': 'DISPATCH_TASK',
+    # 'fileTypes': '-',
+    # 'resultType': 'json'
 }
 
 r = requests.get(url, params=params)
-print(r.status_code)
-print(r.json())
+if r.status_code == 200:
+    print(r.text)
+else:
+    print("status_code: {}, reason: {}".format(r.status_code, r.reason))
