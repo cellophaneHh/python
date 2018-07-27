@@ -37,11 +37,11 @@ t1.start()
 t2 = threading.Thread(
     name='nonblock',
     target=wait_for_event_timeout,
-    args=(e, 2),
+    args=(e, 1),
 )
 t2.start()
 
 logging.debug('waiting before calling Event.set()')
-time.sleep(3)
+time.sleep(5)
 e.set()
 logging.debug('Event is set')
