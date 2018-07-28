@@ -1,0 +1,5 @@
+print()
+print(10 / 3)
+print(round(10 / 3))
+print(134 / 3)
+print(round(134 / 3))
