@@ -37,6 +37,7 @@ queuelib==1.5.0
 requests==2.19.1
 rply==0.7.6
 Scrapy==1.5.1
+selenium==3.13.0
 service-factory==0.1.5
 service-identity==17.0.0
 six==1.11.0
