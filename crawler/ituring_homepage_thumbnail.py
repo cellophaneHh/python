@@ -6,10 +6,11 @@
 
 import requests
 import os
-import re_cases
+import re
 from log import logger
 import time
-import random
+import threading
+import queue
 
 # 定义源码目录
 _source_dir = './html'
@@ -71,7 +72,7 @@ def get_img_urls(source_url, html_source, reg_img):
     if not source_url or not html_source:
         return
 
-    all_url = re_cases.findall(reg_img, html_source)
+    all_url = re.findall(reg_img, html_source)
 
     if not all_url:
         return
@@ -133,15 +134,16 @@ def handle_img_url(img_urls):
     处理所有获取到的url
     """
     if img_urls:
+        img_url_queue = queue.Queue()
         for img_url in img_urls:
-            try:
-                logger.info('开始下载: {0}'.format(img_url))
-                download_and_save_img(img_url)
-            except requests.RequestException as e:
-                logger.error("下载失败: {}".format(img_url), e)
-            finally:
-                # 每次随机停止1~4秒再处理下一个
-                time.sleep(random.randint(1, 4))
+            img_url_queue.put(img_url)
+        # 两个线程
+        t1 = threading.Thread(name='t1', target=work, args=(img_url_queue,))
+        t2 = threading.Thread(name='t2', target=work, args=(img_url_queue,))
+        t1.start()
+        t2.start()
+        t2.join()
+        t1.join()
     else:
         logger.warn("图片链接为空!")
 
@@ -165,6 +167,12 @@ def download_and_save_img(img_url):
         raise e
 
 
+def work(url_queue):
+    while url_queue.qsize() > 0:
+        download_and_save_img(url_queue.get())
+    logger.info(threading.current_thread().name + ",结束..")
+
+
 def main():
     """
     采集入口
@@ -179,6 +187,7 @@ def main():
     if source:
         # 解析链接
         urls = get_img_urls(source_url, source, reg_img)
+        logger.info('数量: {}'.format(len(urls)))
         # 处理链接
         handle_img_url(urls)
 
