@@ -12,12 +12,12 @@ async def task_func():
 
 async def main(loop):
     print('creating task')
-    task = loop.create_task(task_func)
+    task = loop.create_task(task_func())
 
     print('canceling task')
     task.cancel()
 
-    print('canceled task {!r}'.format(task()))
+    print('canceled task {!r}'.format(task))
     try:
         await task
     except asyncio.CancelledError:
