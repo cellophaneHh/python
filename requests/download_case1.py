@@ -1,7 +1,13 @@
 import os
 import requests
 
-res = requests.get('http://www.baidu.com/')
+
+proxies = {
+    'http': 'http://124.235.208.252:443',
+    'https': 'http://124.235.208.252:443'
+}
+
+res = requests.get(url='http://www.baidu.com/', proxies=proxies)
 
 source_file = './sources/baidu.html'
 
@@ -17,3 +23,5 @@ if not os.path.exists(source_file):
 # 写入下载的源码
 with open(source_file, 'w') as source:
     source.write(res.text)
+
+print('finished...')

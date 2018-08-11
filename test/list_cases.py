@@ -1,4 +1,5 @@
 '''
+...
 '''
 
 
@@ -14,4 +15,8 @@ def foo(*values):
 temp = [1, 2, 3, 4, 5]
 foo(temp)
 print('==============')
-foo(*temp)  # 自动对list进行解包
+foo(*temp)
+print('==============')
+# 临时分配一个名字
+test_list = [_ for _ in [1, 2, 3]]
+print(test_list)
