@@ -2,6 +2,8 @@
 
 """
 日志
+
+废弃，改用log_handler.py
 """
 
 import logging
