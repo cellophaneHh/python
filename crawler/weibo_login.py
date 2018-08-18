@@ -39,9 +39,9 @@ try:
         '//div[contains(@class, "login_btn")]/a[@tabindex="6"]'
     )
     login_button.click()
+    time.sleep(3)
 except Exception as e:
     log.exception('登录失败!', e)
 finally:
-    time.sleep(3)
     log.info('cookies: %s', browser.get_cookies())
     browser.quit()
