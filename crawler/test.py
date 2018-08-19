@@ -9,3 +9,6 @@ result = detail_url_pattern.findall(source)
 
 
 print(result)
+
+
+print('asdf' == 'ASDF'.lower())

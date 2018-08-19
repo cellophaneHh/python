@@ -5,4 +5,3 @@ def f(ham: str, eggs: str = 'eggs') -> str:
 
 f('spam')
 f('driver')
-
