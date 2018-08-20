@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options
 import time
 import log_handler
 
@@ -18,8 +19,11 @@ sina_weibo_login = "https://weibo.com/"
 profile = webdriver.FirefoxProfile()
 profile.set_preference('general.useragent.override',
                        user_agent.USER_AGENT_FIREFOX)
+# 设置firefox不显示界面
+ff_option = Options()
+ff_option.add_argument('-headless')
 
-browser = webdriver.Firefox(firefox_profile=profile)
+browser = webdriver.Firefox(firefox_profile=profile, options=ff_option)
 browser.get(sina_weibo_login)
 try:
     # 等待直到用户名输入框出现，最多10s
