@@ -21,7 +21,7 @@ profile.set_preference('general.useragent.override',
                        user_agent.USER_AGENT_FIREFOX)
 # 设置firefox不显示界面
 ff_option = Options()
-ff_option.add_argument('-headless')
+# ff_option.add_argument('-headless')
 
 browser = webdriver.Firefox(firefox_profile=profile, options=ff_option)
 browser.get(sina_weibo_login)
