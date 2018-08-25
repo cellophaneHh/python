@@ -1,14 +1,8 @@
-import re
-
-detail_url_pattern = re.compile(('<div class="post_weidaopic"'
-                                 '>[\s\S]*?<a href="(.*?)"'))
-source = ('<div class="post_weidaopic">http'
-          'asdlfjasdfljasdfljk<a href="asdfl;asldfjlasjdf"')
-
-result = detail_url_pattern.findall(source)
+import json
 
 
-print(result)
-
-
-print('asdf' == 'ASDF'.lower())
+info_json = {'a': 'b'}
+with open('test_json.json', 'a') as f:
+    json.dump(info_json, f, ensure_ascii=False, separators=(',', ':'))
+    f.write('\n')
+print('finished...')
