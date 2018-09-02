@@ -6,3 +6,4 @@ s = "asdf/qwe/r"
 
 print(s.rpartition('/'))
 print(s.partition('/'))
+print(s.split(' '))

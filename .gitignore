@@ -7,7 +7,7 @@ sources/
 # html源码和下载的图片目录
 html/
 *.html
-img/
+*img/
 # pycharm虚拟环境
 venv/
 log/

@@ -2,7 +2,7 @@ import os.path
 
 PATHS = [
     '/one/two/three',
-    '/one/two/three',
+    '/one/two/three.jpg',
     '/',
     '.',
     '',

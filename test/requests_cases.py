@@ -1,38 +1,35 @@
+'''
+谷歌为啥访问不了呢。。。
+'''
 import requests
 import json
-import collections
+from lxml import etree
 
 
-def show_ids(item):
-    dd = collections.defaultdict()
-    for k, v in item.items():
-        dd[k] = v
-    dd.setdefault('children', [])
-    print(dd['id'])
-    children = dd['children']
-    if children:
-        for child in children:
-            show_ids(child)
+def get_proxy():
+    return 'socks5://127.0.0.1:1080'
+    # r = requests.get('http://193.112.95.23:5010/get/')
+    # if r.status_code == 200:
+    #     return r.text
 
 
-url = 'http://localhost:8080/HappyServer/schedule/task/calculateValueTree'
-
-params = {
-    'authId': '0B9DC610927A2978E69C51951EA19BA6',
-    'targetVolume': 'srfx',
-    'parentId': 'htwv',
-    'selectedIds': 'cb3127c4-154b-4c59-a,5aedff02-958d-4465-9'
+proxy = get_proxy()
+proxies = {
+    'http': proxy,
+    'https': proxy,
 }
-json_dumps = json.dumps(params)
-print(type(json_dumps))
+headers = {
+    'user-agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'
+}
+session = requests.Session()
+print(session.headers)
 
-r = requests.post(url, data=json_dumps, headers={'content-type': 'application/json;charset=utf-8'})
+r = session.get('http://www.google.com',
+                proxies=proxies, headers=headers)
+print('1')
 if r.status_code == 200:
-    json_result = json.loads(r.text)
-    print(json_result)
-    item_ids = json_result['items']
-    for item_id in item_ids:
-        show_ids(item_id)
+    print('2')
+    with open('./google.html', 'w') as f:
+        f.write(r.text)
 else:
-    print("status_code: {}, reason: {}".format(r.status_code, r.reason))
-
+    print('failure...')

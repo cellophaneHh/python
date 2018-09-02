@@ -4,7 +4,9 @@ from redis_pool import pool
 
 r = redis.Redis(connection_pool=pool)
 
-r.sadd('nameset', 'zhangheng')
-name_seq = ['1', '3', '5', '7']
+l = ['1', '2']
 
-print(r.sismember('nameset', 'zhangheng'))
+r.sadd('nameset', tuple(l))
+
+print(r.scard('nameset'))
+print(r.sscan('nameset', 0))
