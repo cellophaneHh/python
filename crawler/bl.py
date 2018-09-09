@@ -153,6 +153,9 @@ def block_task():
 
 
 if __name__ == '__main__':
+    urls = ['http://www.beautylegmm.com/Tina/beautyleg-1655.html']
+    for url in urls:
+        get_imageInfo(url)
     download_image_task()
     # get_image_task()
     # get_detail_urls_task()
