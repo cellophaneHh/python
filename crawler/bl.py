@@ -12,6 +12,7 @@ from resources import user_agent
 from log_handler import LogHandler
 import time
 import os
+import sys
 
 headers = {'user-agent': user_agent.USER_AGENT_CHROME}
 # redis 客户端
@@ -152,8 +153,18 @@ def block_task():
         time.sleep(1000)
 
 
-if __name__ == '__main__':
-    urls = ['http://www.beautylegmm.com/Tina/beautyleg-1655.html']
+def crawl_all_detail():
+    '''爬全站'''
+    download_image_task()
+    get_image_task()
+    get_detail_urls_task()
+    t = threading.Thread(target=block_task)
+    t.start()
+    t.join()
+
+
+def crawl_one_detail(urls):
+    '''爬某一个细览页url'''
     for url in urls:
         get_imageInfo(url)
     download_image_task()
@@ -162,3 +173,10 @@ if __name__ == '__main__':
     t = threading.Thread(target=block_task)
     t.start()
     t.join()
+
+
+if __name__ == '__main__':
+    if sys.argv:
+        crawl_one_detail(sys.argv[1:])
+    else:
+        crawl_all_detail()
