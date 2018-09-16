@@ -4,6 +4,7 @@
 import requests
 import threading
 import multiprocessing
+from multiprocessing import cpu_count
 from lxml import etree
 import json
 from redisclient.redis_pool import pool
@@ -24,6 +25,8 @@ DETAIL_URLS = 'detail_urls'
 # redis中存放从图片列表也采集到的图片的信息列表, 包含人名，时间等分类信息和url，json存储
 IMAGE_INFO = 'image_info'
 log = LogHandler('bl')
+# cpu个数
+CPU_COUNT = cpu_count()
 
 
 def get_url_byxpath(html_source, xpath):
@@ -93,8 +96,7 @@ def get_image_target():
 
 def get_image_task():
     processes = []
-    for i in range(4):
-        print(1)
+    for i in range(CPU_COUNT):
         process = multiprocessing.Process(
             target=get_image_target,
             daemon=True
@@ -137,7 +139,7 @@ def download_image():
 
 def download_image_task():
     processes = []
-    for i in range(10):
+    for i in range(2 * CPU_COUNT):
         process = multiprocessing.Process(
             target=download_image,
             daemon=True
@@ -153,6 +155,12 @@ def block_task():
         time.sleep(1000)
 
 
+def get_imageInfos(urls) -> (list, None):
+    '''获取一个细览页列表的图片信息'''
+    for url in urls:
+        get_imageInfo(url)
+
+
 def crawl_all_detail():
     '''爬全站'''
     download_image_task()
@@ -164,10 +172,10 @@ def crawl_all_detail():
 
 
 def crawl_one_detail(urls):
-    '''爬某一个细览页url'''
-    for url in urls:
-        get_imageInfo(url)
     download_image_task()
+    '''爬某一个细览页url'''
+    if urls:
+        get_imageInfos(urls)
     # get_image_task()
     # get_detail_urls_task()
     t = threading.Thread(target=block_task)
