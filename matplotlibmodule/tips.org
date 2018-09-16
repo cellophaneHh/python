@@ -1,0 +1,3 @@
+** ipython中使用matplotlib
+
+   1. 使用 %matplotlib, 则不需要使用plt.show()显示图形，而是交互式的显示

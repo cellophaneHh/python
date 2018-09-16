@@ -79,6 +79,8 @@ queuelib==1.5.0
 redis==2.10.6
 requests==2.19.1
 rply==0.7.6
+scikit-learn==0.19.2
+scipy==1.1.0
 Scrapy==1.5.1
 selenium==3.13.0
 Send2Trash==1.5.0
@@ -86,6 +88,7 @@ service-factory==0.1.5
 service-identity==17.0.0
 simplegeneric==0.8.1
 six==1.11.0
+sklearn==0.0
 terminado==0.8.1
 tesserocr==2.3.1
 testpath==0.3.1

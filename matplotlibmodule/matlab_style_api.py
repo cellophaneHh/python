@@ -19,5 +19,5 @@ plt.plot(x, np.sin(x))
 plt.subplot(2, 1, 2)
 plt.plot(x, np.cos(x))
 
-# plt.show()
-plt.savefig()
+plt.show()
+# plt.savefig()
