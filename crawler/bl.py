@@ -7,8 +7,7 @@ import multiprocessing
 from multiprocessing import cpu_count
 from lxml import etree
 import json
-from redisclient.redis_pool import pool
-import redis
+from redisclient.redis_pool import redis_client
 from resources import user_agent
 from log_handler import LogHandler
 import time
@@ -17,7 +16,6 @@ import sys
 
 headers = {'user-agent': user_agent.USER_AGENT_CHROME}
 # redis 客户端
-redis_client = redis.Redis(connection_pool=pool)
 # 初始url
 START_PAGE_URL = 'http://www.beautylegmm.com/index-1.html'
 # redis中存放图片列表页url的列表
@@ -27,6 +25,26 @@ IMAGE_INFO = 'image_info'
 log = LogHandler('bl')
 # cpu个数
 CPU_COUNT = cpu_count()
+# 细览页url列表filter的key
+DETAIL_URLS_FILTER_KEY = 'bl_details_urls'
+
+
+def exists(key, value):
+    '''不存在的添加并返回0，存在的返回1'''
+    exists = redis_client.execute_command(
+        'bf.exists {} {}'.format(key, value))
+    if exists == 0:
+        redis_client.execute_command(
+            'bf.add {} {}'.format(key, value))
+    return exists
+
+
+def init_filter():
+    '''初始化filter'''
+    if not redis_client.exists(DETAIL_URLS_FILTER_KEY):
+        redis_client.execute_command(
+            'bf.reserve {} {} {}'
+            .format(DETAIL_URLS_FILTER_KEY, 0.0001, 1000000))
 
 
 def get_url_byxpath(html_source, xpath):
@@ -42,14 +60,23 @@ def get_detail_urls(start_url):
         return
     else:
         detail_urls = get_url_byxpath(response.text, '//div[@class="post_weidaopic"]/a/@href')
-        log.info('采集到细览页url个数: {}'.format(len(detail_urls)))
-        # 存入redis
-        redis_client.rpush(DETAIL_URLS, *detail_urls)
+        # 过滤并将不存在的存入redis
+        for url in detail_urls[:]:
+            if exists(DETAIL_URLS_FILTER_KEY, url) > 0:
+                detail_urls.remove(url)
+
+        log.info('采集到新的细览页url个数: {}'.format(len(detail_urls)))
+
+        if detail_urls:
+            redis_client.rpush(DETAIL_URLS, *detail_urls)
+
         next_pages = get_url_byxpath(response.text,
                                     '//div[@id="pages"]//li[@class="next"]/a/@href')
         if next_pages:
             for next_page in next_pages:
                 get_detail_urls(next_page)
+        else:
+            log.info('细览页翻页完毕')
 
 
 def get_detail_urls_task():
@@ -57,7 +84,6 @@ def get_detail_urls_task():
     t = threading.Thread(target=get_detail_urls, args=(START_PAGE_URL,))
     t.setDaemon(True)
     t.start()
-    t.join()
 
 
 def get_imageInfo(url):
@@ -95,6 +121,7 @@ def get_image_target():
 
 
 def get_image_task():
+    log.info('开始获取图片任务')
     processes = []
     for i in range(CPU_COUNT):
         process = multiprocessing.Process(
@@ -108,6 +135,7 @@ def get_image_task():
 
 def download_image():
     '''从image_info中取图片信息进行下载'''
+    log.info('开始下载图片任务')
     while True:
         image_info = redis_client.lpop(IMAGE_INFO)
         if not image_info:
@@ -184,7 +212,8 @@ def crawl_one_detail(urls):
 
 
 if __name__ == '__main__':
-    if sys.argv:
+    init_filter()
+    if len(sys.argv) > 1:
         crawl_one_detail(sys.argv[1:])
     else:
         crawl_all_detail()
