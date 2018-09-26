@@ -7,7 +7,8 @@ import multiprocessing
 from multiprocessing import cpu_count
 from lxml import etree
 import json
-from redisclient.redis_pool import redis_client
+#from redisclient.redis_pool import redis_client
+from redisclient.redis_cluster import redis_cluster_client as redis_client
 from resources import user_agent
 from log_handler import LogHandler
 import time
@@ -31,20 +32,30 @@ DETAIL_URLS_FILTER_KEY = 'bl_details_urls'
 
 def exists(key, value):
     '''不存在的添加并返回0，存在的返回1'''
-    exists = redis_client.execute_command(
-        'bf.exists {} {}'.format(key, value))
+    # exists = redis_client.execute_command(
+    #     'bf.exists {} {}'.format(key, value))
+    exists = redis_client.execute_command('bf.exists', key, value)
     if exists == 0:
         redis_client.execute_command(
-            'bf.add {} {}'.format(key, value))
+            'bf.add',
+            key,
+            value
+        )
     return exists
 
 
 def init_filter():
     '''初始化filter'''
     if not redis_client.exists(DETAIL_URLS_FILTER_KEY):
+        # redis_client.execute_command(
+        #     'bf.reserve {} {} {}'
+        #     .format(DETAIL_URLS_FILTER_KEY, 0.0001, 1000000))
         redis_client.execute_command(
-            'bf.reserve {} {} {}'
-            .format(DETAIL_URLS_FILTER_KEY, 0.0001, 1000000))
+            'bf.reserve',
+            DETAIL_URLS_FILTER_KEY,
+            0.0001,
+            1000000
+        )
 
 
 def get_url_byxpath(html_source, xpath):
