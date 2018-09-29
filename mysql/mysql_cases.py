@@ -10,4 +10,10 @@ data = cursor.fetchall()
 
 print(data)
 
+cursor.execute('select * from employee')
+
+data = cursor.fetchmany(2)
+
+print(data)
+
 db.close()
