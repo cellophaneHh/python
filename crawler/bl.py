@@ -27,7 +27,7 @@ log = LogHandler('bl')
 # cpu个数
 CPU_COUNT = cpu_count()
 # 细览页url列表filter的key
-DETAIL_URLS_FILTER_KEY = 'bl_details_urls'
+DETAIL_URLS_FILTER_KEY = 'bl_detail_urls'
 
 
 def exists(key, value):
@@ -100,7 +100,7 @@ def get_detail_urls_task():
 def get_imageInfo(url):
     '''获取所有图片列表页url'''
     # url = 'http://www.beautylegmm.com/Stephy/beautyleg-1652.html'
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, timeout=5)
     if response.status_code != 200:
         return
     else:
@@ -117,15 +117,24 @@ def get_imageInfo(url):
         next_pages = get_url_byxpath(response.text, '//div[@class="archives_page_bar"]/a[@class="next"]/@href')
         if next_pages:
             log.info('细览页下一页: {}'.format(next_pages[0]))
-            time.sleep(3)
-            get_imageInfo(next_pages[0])
+            try:
+                get_imageInfo(next_pages[0])
+            except Exception as e:
+                redis_client.rpush(DETAIL_URLS, url)
+                log.error(e)
 
 
 def get_image_target():
     while True:
         url = redis_client.lpop(DETAIL_URLS)
         if url:
-            get_imageInfo(url)
+            try:
+                get_imageInfo(url)
+            except Exception as e:
+                redis_client.rpush(DETAIL_URLS, url)
+                log.error(e)
+            finally:
+                time.sleep(1)
         else:
             log.info('无细览页链接，休眠..')
             time.sleep(10)
@@ -158,7 +167,7 @@ def download_image():
             date = image_info_json['date']
             url = image_info_json['url']
             try:
-                img_response = requests.get(url, headers=headers)
+                img_response = requests.get(url, headers=headers, timeout=5)
                 if not img_response.status_code == 200:
                     log.error('下载失败: {}, {}, {}'.format(name, date, url))
                 else:
