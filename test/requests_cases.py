@@ -7,10 +7,10 @@ from lxml import etree
 
 
 def get_proxy():
-    return 'socks5://127.0.0.1:1080'
-    # r = requests.get('http://193.112.95.23:5010/get/')
-    # if r.status_code == 200:
-    #     return r.text
+    # return 'socks5://127.0.0.1:1080'
+    r = requests.get('http://193.112.95.23:5010/get/')
+    if r.status_code == 200:
+        return r.text
 
 
 proxy = get_proxy()
@@ -23,13 +23,11 @@ headers = {
 }
 session = requests.Session()
 print(session.headers)
-
-r = session.get('http://www.google.com',
-                proxies=proxies, headers=headers)
+print(proxies)
+r = session.get('http://www.beautylegmm.com/photo/beautyleg/2018/1673/beautyleg-1673-0001.jpg',
+                proxies=proxies, headers=headers, timeout=5)
 print('1')
 if r.status_code == 200:
-    print('2')
-    with open('./google.html', 'w') as f:
-        f.write(r.text)
+    print('ok...')
 else:
     print('failure...')

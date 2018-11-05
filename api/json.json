@@ -1,0 +1,14 @@
+{
+    "retcode": 0,
+    "retmesg": "查询成功",
+    "retdata": {
+
+        "comments": [
+            {"id":"0942757A6BC24966A21AE5F37109CFF8", "content": "评论2", "type": 0, "postId": "asdf", "commentId": "", "createTime": 1541315749677,
+          "replayList": [{"id": "57D3196534D141E380DFC834DCCE27A6", "content": "评论1", "type": 1, "postId": "asdf", "commentId": "0942757A6BC24966A21AE5F37109CFF8", "createTime": 1541315799781, "replayList": ""}, {"id": "7CE60F1A1466459F9F181146C478740A", "content": "评论2", "type": 1, "postId": "asdf", "commentId": "0942757A6BC24966A21AE5F37109CFF8", "createTime": 1541315804619, "replayList": ""}, {"id": "3817234D7D3F4EF585D73CF160AC4909", "content": "评论3", "type": 1, "postId": "asdf", "commentId": "0942757A6BC24966A21AE5F37109CFF8", "createTime": 1541315809146, "replayList": ""}]},
+            {"id": "50074C59B15F456E94217635178B42E6", "content": "评论3", "type": 0, "postId": "asdf", "commentId": "", "createTime": 1541315757269, "replayList": ""},
+            {"id": "9E761E663D03450EA3B86700BC27CFDB", "content": "评论4", "type": 0, "postId": "asdf", "commentId": "", "createTime": 1541315761667, "replayList": ""},
+            {"id": "F49041FF578240019D92863FF5F7B8CD", "content": "评论5", "type": 0, "postId": "asdf", "commentId": "", "createTime": 1541315767424, "replayList":""}
+        ]
+    }
+}

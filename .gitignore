@@ -12,3 +12,4 @@ html/
 venv/
 log/
 *.log
+nohup.out
