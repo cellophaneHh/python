@@ -7,51 +7,71 @@ from selenium.webdriver.common.action_chains import ActionChains
 # from selenium.webdriver.common.keys import Keys
 import time
 
-sina_weibo_login = "https://music.163.com/"
 
-# 修改默认user-agent
-profile = webdriver.FirefoxProfile()
-profile.set_preference('general.useragent.override',
-                       user_agent.USER_AGENT_FIREFOX)
+def login_netease(login_type):
+    sina_weibo_login = "https://music.163.com/"
 
-browser = webdriver.Firefox(firefox_profile=profile)
-browser.get(sina_weibo_login)
-#打开登录窗口
-# 鼠标悬停
-xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
-# 邮箱登录元素标记, 用于判断元素是否存在
-xpath_login_email_content = '//a[@data-action="login"]/em[contains(text(), "网易邮箱帐号登录")]'
-# 邮箱登录链接, 用于打开登录窗口
-xpath_login_email_a = xpath_login_email_content + "/.."
+    # 修改默认user-agent
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference('general.useragent.override',
+                           user_agent.USER_AGENT_FIREFOX)
 
-# 登录窗口相关
-# 账号
-xpath_login_email = "//input[@placeholder='请输入帐号']"
-# 密码
-xpath_login_pwd = "//input[@placeholder='请输入密码']"
-# 登录按钮
-xpath_login_input = "//a[@data-action='login']/i[contains(text(), '登　录')]/.."
-try:
-    # 去掉selenium特征,window.navigator.webdriver为true改为false
-    browser.execute_script("Object.defineProperties(navigator, {webdriver: {get:function(){return false}}})")
-    print(browser.execute_script('window.navigator.webdriver'))
-    print("-----------------")
-    # 等待邮箱登录标记出现
-    element = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, xpath_login_ele))
-    )
-    print('等待结束。。。')
+    browser = webdriver.Firefox(firefox_profile=profile)
+    browser.get(sina_weibo_login)
+    #打开登录窗口
+    # 鼠标悬停
+    xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
 
-    # TODO 打开控制台,没成功
-    # browser.find_element_by_tag_name("body").send_keys(Keys.CONTROL + Keys.SHIFT + "k")
-    # time.sleep(2)
+    try:
+        # 去掉selenium特征,window.navigator.webdriver为true改为false
+        browser.execute_script("Object.defineProperties(navigator, {webdriver: {get:function(){return false}}})")
+        print(browser.execute_script('window.navigator.webdriver'))
+        print("-----------------")
+        # 等待登录标记出现
+        element = WebDriverWait(browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, xpath_login_ele))
+        )
+        print('等待结束。。。')
 
-    # 鼠标悬停在登录链接上弹出所有登录方式
-    login_ele = browser.find_element_by_xpath(xpath_login_ele)
-    ActionChains(browser).move_to_element(login_ele).perform()
+        # TODO 打开控制台,没成功
+        # browser.find_element_by_tag_name("body").send_keys(Keys.CONTROL + Keys.SHIFT + "k")
+        # time.sleep(2)
+
+        # 鼠标悬停在登录链接上弹出所有登录方式
+        login_ele = browser.find_element_by_xpath(xpath_login_ele)
+        ActionChains(browser).move_to_element(login_ele).perform()
+        # TODO 调用登录方法
+        if login_type == 'email':
+            login_email(browser)
+        elif login_type == 'sina':
+            login_sina(browser)
+        else:
+            pass
+
+        time.sleep(3)
+        print(browser.current_url)
+        print(browser.get_cookies())
+    except Exception as e:
+        print(e)
+        print('登录失败..')
+    finally:
+        browser.quit()
+
+
+def login_email(browser):
+    '''邮箱登录方式'''
+    # 邮箱登录元素标记
+    xpath_login_email_content = '//a[@data-action="login"]/em[contains(text(), "网易邮箱帐号登录")]'
+    # 邮箱登录链接, 用于打开登录窗口
+    xpath_login_email_a = xpath_login_email_content + "/.."
+    # 账号
+    xpath_login_email = "//input[@placeholder='请输入帐号']"
+    # 密码
+    xpath_login_pwd = "//input[@placeholder='请输入密码']"
+    # 登录按钮
+    xpath_login_input = "//a[@data-action='login']/i[contains(text(), '登　录')]/.."
     # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_email_a)
-    print(type(login_click_link))
     login_click_link.click()
 
     # 输入邮箱
@@ -64,11 +84,36 @@ try:
     # 点击登录按钮
     login_button = browser.find_element_by_xpath(xpath_login_input)
     login_button.click()
-    time.sleep(2)
-    print(browser.current_url)
-    print(browser.get_cookies())
-except Exception as e:
-    print(e)
-    print('登录失败..')
-finally:
-    browser.quit()
+
+
+def login_sina(browser):
+    '''新浪微博登录方式'''
+    # 邮箱登录链接, 用于打开新浪微博授权登录页面
+    xpath_login_sina_a = '//a[@data-action="login"]/em[contains(text(), "新浪微博登录")]/..'
+    # 账号
+    xpath_login_sina = "//input[@id='userId']"
+    # 密码
+    xpath_login_pwd = "//input[@id='passwd']"
+    # 登录按钮
+    xpath_login_input = "//div[@class='oauth_login_submit']/p/a[@action-type='submit']"
+    # 打开登录窗口
+    login_click_link = browser.find_element_by_xpath(xpath_login_sina_a)
+    login_click_link.click()
+
+    # 输入邮箱
+    email_input = browser.find_element_by_xpath(xpath_login_sina)
+    email_input.send_keys(settings.USER_NAME)
+    # 输入密码
+    password_input = browser.find_element_by_xpath(xpath_login_pwd)
+    password_input.send_keys(settings.PASSWORD)
+
+    # 点击登录按钮
+    login_button = browser.find_element_by_xpath(xpath_login_input)
+    login_button.click()
+
+
+login_netease('sina')
+
+if __name__ == '__main__':
+    # login_netease('email')
+    login_netease('sina')
