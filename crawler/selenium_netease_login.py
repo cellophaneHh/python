@@ -125,5 +125,6 @@ def login_sina(browser):
 
 
 if __name__ == '__main__':
+    # 接受参数email, sina
     login_type = sys.argv[0]
     login_netease(login_type)
