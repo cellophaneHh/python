@@ -23,8 +23,7 @@ def login_netease(login_type):
     browser = webdriver.Firefox(executable_path="/usr/local/bin/geckodriver",
                                 firefox_profile=profile, firefox_options=options)
     browser.get(sina_weibo_login)
-    #打开登录窗口
-    # 鼠标悬停
+    # 鼠标悬停元素
     xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
     try:
         # 去掉selenium特征,window.navigator.webdriver为true改为false
@@ -89,11 +88,9 @@ def login_email(browser):
 
 def login_sina(browser):
     '''新浪微博登录方式'''
-    # 邮箱登录链接, 用于打开新浪微博授权登录页面
+    # 微博登录链接, 用于打开新浪微博授权登录页面
+    # firefox不支持标签页,要新打开一个窗口
     xpath_login_sina_a = '//a[@data-action="login"]/em[contains(text(), "新浪微博登录")]/..'
-    # 登录按钮
-    xpath_login_input = "//div[@class='oauth_login_submit']/p/a[@action-type='submit']"
-    # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_sina_a)
     # login_click_link.click()
     sina_auth_url = login_click_link.get_attribute("href")
@@ -122,7 +119,7 @@ def login_sina(browser):
     login_button_click_js = "document.getElementsByClassName('WB_btn_login formbtn_01')[0].click()"
     browser.execute_script(login_button_click_js)
     time.sleep(3)
-    # 切换到新打开的窗口
+    # 切换回网易云首页窗口
     windows = browser.window_handles
     browser.switch_to.window(windows[0])
 
