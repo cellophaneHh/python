@@ -1,10 +1,11 @@
 from resources import settings, user_agent
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-# from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.keys import Keys
 import time
 
 
@@ -15,21 +16,21 @@ def login_netease(login_type):
     profile = webdriver.FirefoxProfile()
     profile.set_preference('general.useragent.override',
                            user_agent.USER_AGENT_FIREFOX)
-    options = webdriver.FirefoxOptions()
-    options.set_headless()
-    browser = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
+    options = Options()
+    # options.add_argument('-headless')
+    browser = webdriver.Firefox(executable_path="D:/software/geckodriver-v0.21.0-win64/geckodriver.exe",
+                                firefox_profile=profile, firefox_options=options)
     browser.get(sina_weibo_login)
     #打开登录窗口
     # 鼠标悬停
     xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
-
     try:
         # 去掉selenium特征,window.navigator.webdriver为true改为false
         browser.execute_script("Object.defineProperties(navigator, {webdriver: {get:function(){return false}}})")
         print(browser.execute_script('window.navigator.webdriver'))
         print("-----------------")
         # 等待登录标记出现
-        element = WebDriverWait(browser, 10).until(
+        WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.XPATH, xpath_login_ele))
         )
         print('等待结束。。。')
@@ -48,8 +49,7 @@ def login_netease(login_type):
             login_sina(browser)
         else:
             pass
-
-        time.sleep(3)
+        time.sleep(5)
         print(browser.current_url)
         print(browser.get_cookies())
     except Exception as e:
@@ -91,21 +91,23 @@ def login_sina(browser):
     '''新浪微博登录方式'''
     # 邮箱登录链接, 用于打开新浪微博授权登录页面
     xpath_login_sina_a = '//a[@data-action="login"]/em[contains(text(), "新浪微博登录")]/..'
-    # 账号
-    xpath_login_sina = "//input[@id='userId']"
-    # 密码
-    xpath_login_pwd = "//input[@id='passwd']"
     # 登录按钮
     xpath_login_input = "//div[@class='oauth_login_submit']/p/a[@action-type='submit']"
     # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_sina_a)
-    login_click_link.click()
-    time.sleep(1)
+    sina_auth_url = login_click_link.get_attribute("href")
+    browser.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
+    browser.get(sina_auth_url)
+    #等待登录按钮出现
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, xpath_login_input))
+    )
     # 输入邮箱
-    email_input = browser.find_element_by_xpath(xpath_login_sina)
+    email_input = browser.find_element_by_id("userId")
+    print("userId: ", email_input)
     email_input.send_keys(settings.USER_NAME)
     # 输入密码
-    password_input = browser.find_element_by_xpath(xpath_login_pwd)
+    password_input = browser.find_element_by_id("passwd")
     password_input.send_keys(settings.PASSWORD)
 
     # 点击登录按钮
@@ -113,7 +115,7 @@ def login_sina(browser):
     login_button.click()
 
 
-login_netease('sina')
+# login_netease('sina')
 
 if __name__ == '__main__':
     # login_netease('email')
