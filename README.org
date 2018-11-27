@@ -3,3 +3,4 @@
 
 - [[file:crawler/ituring_homepage_thumbnail.py][ituring_homepage_thumbnail.py]] 爬取图灵社区首页书籍缩略图
 
+- [[file:crawler/selenium_netease_login.py][selenium_netease_login.py]] selenium实现网易云根据邮箱和新浪微博模拟登录

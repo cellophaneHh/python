@@ -5,8 +5,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 import time
+import traceback
+import sys
 
 
 def login_netease(login_type):
@@ -18,7 +20,7 @@ def login_netease(login_type):
                            user_agent.USER_AGENT_FIREFOX)
     options = Options()
     # options.add_argument('-headless')
-    browser = webdriver.Firefox(executable_path="D:/software/geckodriver-v0.21.0-win64/geckodriver.exe",
+    browser = webdriver.Firefox(executable_path="/usr/local/bin/geckodriver",
                                 firefox_profile=profile, firefox_options=options)
     browser.get(sina_weibo_login)
     #打开登录窗口
@@ -33,8 +35,6 @@ def login_netease(login_type):
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.XPATH, xpath_login_ele))
         )
-        print('等待结束。。。')
-
         # TODO 打开控制台,没成功
         # browser.find_element_by_tag_name("body").send_keys(Keys.CONTROL + Keys.SHIFT + "k")
         # time.sleep(2)
@@ -42,18 +42,17 @@ def login_netease(login_type):
         # 鼠标悬停在登录链接上弹出所有登录方式
         login_ele = browser.find_element_by_xpath(xpath_login_ele)
         ActionChains(browser).move_to_element(login_ele).perform()
-        # TODO 调用登录方法
+        # 调用登录方法
         if login_type == 'email':
             login_email(browser)
         elif login_type == 'sina':
             login_sina(browser)
         else:
             pass
-        time.sleep(5)
         print(browser.current_url)
         print(browser.get_cookies())
     except Exception as e:
-        print(e)
+        print(traceback.format_exc())
         print('登录失败..')
     finally:
         browser.quit()
@@ -85,6 +84,7 @@ def login_email(browser):
     # 点击登录按钮
     login_button = browser.find_element_by_xpath(xpath_login_input)
     login_button.click()
+    time.sleep(5)
 
 
 def login_sina(browser):
@@ -95,28 +95,38 @@ def login_sina(browser):
     xpath_login_input = "//div[@class='oauth_login_submit']/p/a[@action-type='submit']"
     # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_sina_a)
+    # login_click_link.click()
     sina_auth_url = login_click_link.get_attribute("href")
-    browser.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
-    browser.get(sina_auth_url)
-    #等待登录按钮出现
+    browser.execute_script('window.open("{}")'.format(sina_auth_url))
+    # 切换到新打开的窗口
+    windows = browser.window_handles
+    browser.switch_to.window(windows[-1])
+    #等待登录框出现
     WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, xpath_login_input))
+        EC.presence_of_element_located((By.ID, "userId"))
     )
+    # 偶尔会出现placeholder没有清空的问题
+    time.sleep(0.5)
     # 输入邮箱
     email_input = browser.find_element_by_id("userId")
-    print("userId: ", email_input)
+    email_input.click()
     email_input.send_keys(settings.USER_NAME)
     # 输入密码
     password_input = browser.find_element_by_id("passwd")
     password_input.send_keys(settings.PASSWORD)
-
+    # 直接点击会点击不到
+    time.sleep(0.5)
     # 点击登录按钮
-    login_button = browser.find_element_by_xpath(xpath_login_input)
-    login_button.click()
+    # login_button = browser.find_element_by_xpath(xpath_login_input)
+    # login_button.click()
+    login_button_click_js = "document.getElementsByClassName('WB_btn_login formbtn_01')[0].click()"
+    browser.execute_script(login_button_click_js)
+    time.sleep(3)
+    # 切换到新打开的窗口
+    windows = browser.window_handles
+    browser.switch_to.window(windows[0])
 
-
-# login_netease('sina')
 
 if __name__ == '__main__':
-    # login_netease('email')
-    login_netease('sina')
+    login_type = sys.argv[0]
+    login_netease(login_type)
