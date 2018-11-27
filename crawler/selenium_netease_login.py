@@ -15,8 +15,9 @@ def login_netease(login_type):
     profile = webdriver.FirefoxProfile()
     profile.set_preference('general.useragent.override',
                            user_agent.USER_AGENT_FIREFOX)
-
-    browser = webdriver.Firefox(firefox_profile=profile)
+    options = webdriver.FirefoxOptions()
+    options.set_headless()
+    browser = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
     browser.get(sina_weibo_login)
     #打开登录窗口
     # 鼠标悬停
@@ -99,7 +100,7 @@ def login_sina(browser):
     # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_sina_a)
     login_click_link.click()
-
+    time.sleep(1)
     # 输入邮箱
     email_input = browser.find_element_by_xpath(xpath_login_sina)
     email_input.send_keys(settings.USER_NAME)
