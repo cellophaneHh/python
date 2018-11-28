@@ -72,14 +72,16 @@ def login_email(browser):
     # 打开登录窗口
     login_click_link = browser.find_element_by_xpath(xpath_login_email_a)
     login_click_link.click()
-
+    # 元素不显示不能点击问题
+    time.sleep(0.5)
     # 输入邮箱
     email_input = browser.find_element_by_xpath(xpath_login_email)
     email_input.send_keys(settings.NETEASE_USER_NAME)
     # 输入密码
     password_input = browser.find_element_by_xpath(xpath_login_pwd)
     password_input.send_keys(settings.NETEASE_PWD)
-
+    # 登录按钮被遮蔽问题
+    time.sleep(0.5)
     # 点击登录按钮
     login_button = browser.find_element_by_xpath(xpath_login_input)
     login_button.click()
@@ -126,5 +128,8 @@ def login_sina(browser):
 
 if __name__ == '__main__':
     # 接受参数email, sina
-    login_type = sys.argv[0]
-    login_netease(login_type)
+    if len(sys.argv) >= 2:
+        login_type = sys.argv[1]
+        login_netease(login_type)
+    else:
+        print("需要选择参数email或者sina")
