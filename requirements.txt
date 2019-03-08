@@ -38,7 +38,8 @@ jupyter-client==5.2.3
 jupyter-console==5.2.0
 jupyter-core==4.4.0
 kiwisolver==1.0.1
-line-profiler==2.1.2
+# python3.7 gcc has error
+# line-profiler==2.1.2
 lxml==4.2.3
 MarkupSafe==1.0
 matplotlib==2.2.3
