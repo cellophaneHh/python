@@ -11,16 +11,25 @@ import traceback
 import sys
 import os
 
-driver_path = os.getcwd() + "/driver/geckodriver"
 
-class Netease_Login:
-    '''网易云音乐模拟登陆'''
+class NeteaseLogin:
+    """
+    网易云音乐模拟登陆
+    目前实现了新浪微博和网易邮箱登录
+    """
+
 
     def __init__(self, logintype, username, password):
-        self.logintype = logintype
+        """
+        logintype: email 邮箱登录 sina 新浪微博登录
+        username: 登录名
+        password: 密码
+        """
+        self.loginType = logintype
         self.username = username
         self.password = password
-        self.sina_weibo_login = "https://music.163.com/"
+        self.netease_home = "https://music.163.com/"
+        self.driver_path = os.getcwd() + "/driver/geckodriver"
 
 
     def login_netease(self):
@@ -28,10 +37,11 @@ class Netease_Login:
         profile = webdriver.FirefoxProfile()
         profile.set_preference('general.useragent.override', user_agent.USER_AGENT_FIREFOX)
         options = Options()
-        options.add_argument('-headless')
-        browser = webdriver.Firefox(executable_path=driver_path,
+        # options.add_argument('-headless')
+
+        browser = webdriver.Firefox(executable_path=self.driver_path,
                                     firefox_profile=profile, firefox_options=options)
-        browser.get(self.sina_weibo_login)
+        browser.get(self.netease_home)
         # 鼠标悬停元素
         xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
         try:
@@ -51,10 +61,10 @@ class Netease_Login:
             login_ele = browser.find_element_by_xpath(xpath_login_ele)
             ActionChains(browser).move_to_element(login_ele).perform()
             # 调用登录方法
-            if self.login_type == 'email':
-                self._login_email(browser, username, password)
-            elif self.login_type == 'sina':
-                self._login_sina(browser, username, password)
+            if self.loginType == 'email':
+                self._login_email(browser)
+            elif self.loginType == 'sina':
+                self._login_sina(browser)
             else:
                 pass
             print(browser.current_url)
@@ -85,10 +95,10 @@ class Netease_Login:
         time.sleep(0.5)
         # 输入邮箱
         email_input = browser.find_element_by_xpath(xpath_login_email)
-        email_input.send_keys(settings.NETEASE_USER_NAME)
+        email_input.send_keys(self.username)
         # 输入密码
         password_input = browser.find_element_by_xpath(xpath_login_pwd)
-        password_input.send_keys(settings.NETEASE_PWD)
+        password_input.send_keys(self.password)
         # 登录按钮被遮蔽问题
         time.sleep(0.5)
         # 点击登录按钮
@@ -134,14 +144,17 @@ class Netease_Login:
         windows = browser.window_handles
         browser.switch_to.window(windows[0])
 
+    def __repr__(self):
+        return '{logintype:' + self.logintype + ', username:' + self.username + "}"
+
 
 if __name__ == '__main__':
     # 接受参数email, sina
     if len(sys.argv) >= 4:
-        login_type = sys.argv[1]
+        loginType = sys.argv[1]
         username = sys.argv[2]
         password = sys.argv[3]
-        nl = Netease_Login(login_type, username, password)
+        nl = NeteaseLogin(loginType, username, password)
         nl.login_netease()
     else:
         print("需要输入登录类型(email或者sina), 登录名，密码")
