@@ -18,7 +18,6 @@ class NeteaseLogin:
     目前实现了新浪微博和网易邮箱登录
     """
 
-
     def __init__(self, logintype, username, password):
         """
         logintype: email 邮箱登录 sina 新浪微博登录
@@ -143,6 +142,7 @@ class NeteaseLogin:
         # 切换回网易云首页窗口
         windows = browser.window_handles
         browser.switch_to.window(windows[0])
+
 
     def __repr__(self):
         return '{logintype:' + self.logintype + ', username:' + self.username + "}"

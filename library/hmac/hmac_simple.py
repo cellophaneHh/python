@@ -1,3 +1,4 @@
+
 import hmac
 
 disgest_maker = hmac.new(b'secret-shared-key-goes-here')
