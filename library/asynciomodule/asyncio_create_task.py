@@ -1,6 +1,6 @@
-'''
-在事件循环中创建任务
-''''
+"""
+创建task
+"""
 
 import asyncio
 
@@ -12,10 +12,10 @@ async def task_func():
 
 async def main(loop):
     print('creating task')
-    task = loop.create_task(task_func()) # 创建一个任务
+    task = loop.create_task(task_func())
     print('waiting for {!r}'.format(task))
     return_value = await task
-    print('task completed {!r}'.format(task))
+    print('task complete {!r}'.format(task))
     print('return value: {!r}'.format(return_value))
 
 
@@ -24,4 +24,3 @@ try:
     event_loop.run_until_complete(main(event_loop))
 finally:
     event_loop.close()
- 

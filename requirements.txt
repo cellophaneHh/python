@@ -15,6 +15,7 @@ constantly==15.1.0
 cryptography==2.3
 cssselect==1.0.3
 cycler==0.10.0
+Cython==0.29.5
 decorator==4.3.0
 defusedxml==0.5.0
 entrypoints==0.2.3
@@ -26,20 +27,17 @@ hyperlink==18.0.0
 idna==2.7
 incremental==17.5.0
 ipykernel==4.9.0
-ipython==6.5.0
+ipython==7.5.0
 ipython-genutils==0.2.0
 ipywidgets==7.4.2
-jedi==0.12.1
+jedi==0.13.3
 Jinja2==2.10
-json-rpc==1.11.0
+json-rpc==1.12.1
 jsonschema==2.6.0
-jupyter==1.0.0
 jupyter-client==5.2.3
 jupyter-console==5.2.0
 jupyter-core==4.4.0
 kiwisolver==1.0.1
-# python3.7 gcc has error
-# line-profiler==2.1.2
 lxml==4.2.3
 MarkupSafe==1.0
 matplotlib==2.2.3
@@ -58,7 +56,7 @@ pexpect==4.6.0
 pickleshare==0.7.4
 Pillow==5.2.0
 prometheus-client==0.3.1
-prompt-toolkit==1.0.15
+prompt-toolkit==2.0.9
 psutil==5.4.7
 ptyprocess==0.6.0
 pyasn1==0.4.4
@@ -72,6 +70,7 @@ PyHamcrest==1.9.0
 PyMySQL==0.9.2
 pyOpenSSL==18.0.0
 pyparsing==2.2.0
+pyproj==1.9.6
 PyQt5==5.11.2
 PyQt5-sip==4.19.12
 PySocks==1.6.8
@@ -106,4 +105,5 @@ w3lib==1.19.0
 wcwidth==0.1.7
 webencodings==0.5.1
 widgetsnbextension==3.4.2
+yapf==0.27.0
 zope.interface==4.5.0

@@ -1,6 +1,7 @@
-'''
-取消一个任务
-'''
+"""
+取消任务
+会抛出asyncio.CancelledError异常
+"""
 
 import asyncio
 
@@ -23,7 +24,7 @@ async def main(loop):
     except asyncio.CancelledError:
         print('caught error from canceled task')
     else:
-        print('task result: {!r}'.format(task.result()))
+        print('taks result: {!r}'.format(task.result()))
 
 
 event_loop = asyncio.get_event_loop()

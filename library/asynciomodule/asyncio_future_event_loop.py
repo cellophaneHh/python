@@ -1,10 +1,14 @@
+"""
+future
+"""
+
 import asyncio
 import time
 
 
 def mark_done(future, result):
-    time.sleep(2)
     print('setting future result to {!r}'.format(result))
+    time.sleep(3)
     future.set_result(result)
 
 
@@ -14,12 +18,9 @@ try:
 
     print('scheduling mark_done')
     event_loop.call_soon(mark_done, all_done, 'the result')
-
-    print('entering event loop')
+    print('enter event loop')
     result = event_loop.run_until_complete(all_done)
     print('returned result: {!r}'.format(result))
 finally:
-    print('closing event loop')
     event_loop.close()
-
-print('future result: {!r}'.format(all_done.result()))
+    pass

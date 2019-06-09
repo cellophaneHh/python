@@ -1,8 +1,3 @@
-'''
-如果被取消的任务中存在另外一个操作，
-这个任务会在等待这个的地方抛出CancelledError异常
-'''
-
 import asyncio
 
 
@@ -12,6 +7,7 @@ async def task_func():
         await asyncio.sleep(1)
     except asyncio.CancelledError:
         print('task_func was canceled')
+        # 异常抛出
         raise
     return 'the result'
 
@@ -24,16 +20,13 @@ def task_canceller(t):
 
 async def main(loop):
     print('creating task')
-    # 创建一个等待另外一个异步任务的任务
     task = loop.create_task(task_func())
-    # 对任务调用取消操作
     loop.call_soon(task_canceller, task)
-
     try:
-        # 上面调用了取消操作，这里会抛出错误
         await task
     except asyncio.CancelledError:
-        print('main() also sees task as cancelled')
+        # main捕获协程取消异常
+        print('main() also sees task as canceled')
 
 
 event_loop = asyncio.get_event_loop()

@@ -1,3 +1,7 @@
+"""
+ensure_future()可以在一个协程中新建task
+其接受一个协程或者future，如果是一个协程的话最终会调用create_task()函数
+"""
 import asyncio
 
 
@@ -15,6 +19,7 @@ async def inner(task):
 
 async def starter():
     print('starter: creating task')
+    #
     task = asyncio.ensure_future(wrapped())
     print('starter: waiting for inner')
     await inner(task)

@@ -1,20 +1,16 @@
-'''
-协程
-'''
-
 import asyncio
 
 
-async def coroutine():
-    print('in coroutine')
+async def coroutine(param):
+    print("in coroutine")
 
-# event_loop????
+
 event_loop = asyncio.get_event_loop()
 try:
     print('starting coroutine')
-    coro = coroutine()
+    coro = coroutine("asdf")
     print('entering event loop')
     event_loop.run_until_complete(coro)
 finally:
     print('closing event loop')
-    event_loop.close()
+    # event_loop.close()

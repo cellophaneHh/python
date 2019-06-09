@@ -1,6 +1,6 @@
-'''
-延迟一段时间后调用
-'''
+"""
+延迟调用
+"""
 
 import asyncio
 
@@ -23,5 +23,4 @@ try:
     print('entering event loop')
     event_loop.run_until_complete(main(event_loop))
 finally:
-    print('closing event loop')
-    event_loop.close()
+    pass
