@@ -143,6 +143,8 @@ class BaiduBaike:
             log.info("下一循环...")
 
     def execute(self):
+        # self.__fenlei_url()
+        # self.__detail_urls()
         self.__detail_content()
 
 

@@ -148,7 +148,7 @@ async def detail_page_urls():
     '''细览页url'''
     detail_url_template = "https://www.beautyleg7.com/siwameitui/list_3_{}.html"
     download_tasks = [
-        download_html(detail_url_template.format(i)) for i in range(36, 44, 1)
+        download_html(detail_url_template.format(i)) for i in range(1, 44, 1)
     ]
     html_sources = await asyncio.wait(download_tasks)
     url_parser_tasks = []
