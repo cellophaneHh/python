@@ -154,6 +154,7 @@ class BaiduBaike:
         while True:
             try:
                 url = await self.detail_urls_queue.get()
+                log.info("url出队: {}".format(url))
                 self.detail_urls_queue.task_done()
                 if self.__detail_html_source_exists(url):
                     continue
@@ -183,15 +184,17 @@ class BaiduBaike:
     async def __new_task_to_queue(self):
         '''向队列中增加url,生产者'''
         # 初始化过滤器中的元素
-        # cursor = db.baike_detail_urls_raw.find(batch_size=5000)
-        # for doc in cursor:
-        #     print(doc['url'])
-        #     self.__detail_urls_raw_add(doc['url'])
+        cursor = db.baike_detail_urls_raw.find(batch_size=5000)
+        for doc in cursor:
+            print(doc['url'])
+            self.__detail_urls_raw_add(doc['url'])
         # 生产者队列
         while True:
             cursor = db.baike_detail_urls_raw.find(batch_size=5000)
             for doc in cursor:
-                await self.detail_urls_queue.put(doc['url'])
+                url = doc['url']
+                log.info("url入队: {}".format(url))
+                await self.detail_urls_queue.put(url)
             log.info('queue_size: {}'.format(self.detail_urls_queue.qsize()))
 
     async def async_execute(self, loop):
