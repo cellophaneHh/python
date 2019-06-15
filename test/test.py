@@ -1,13 +1,16 @@
-import time
+import asyncio
 
-name = "zh"
-age = "18"
 
-print(f"{name}, {age}")
-message = (f'{name},' f'{age}')
-print(message)
-print(f'''
-       {name},
-       {age}
-       ''')
-print(time.time())
+async def work():
+    print("asdfasdf")
+    await asyncio.sleep(1)
+    print('12341234')
+
+
+async def main(loop):
+    works = [work() for i in range(5)]
+    await asyncio.wait(works)
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main(loop))
