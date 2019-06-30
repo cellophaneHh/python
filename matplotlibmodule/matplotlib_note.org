@@ -1,0 +1,49 @@
+#+title: matplotlib
+
+* 为什么学
+** 将数据进行可视化, 更直观的呈现
+** 使数据更加客观，根据说服力
+
+* 各种统计图的对比
+
+** 折线图， 展示数据的变化趋势
+** 直方图, 绘制连续性的数据, 展示一组或者多组数据的分布状况
+** 条形图, 绘制离散的数据，展示各个数据之间的大小，比较差别
+** 散点图, 判断变量之间是否存在数量关联趋势，展示离群点，分布规律
+
+* 折线图
+
+1. 折线图plt.plot(x, y)
+2. 图片大小和分辨率plt.figure
+3. 图片保存,plt.savefig
+4. x轴和y轴刻度和字符串plt.xticks 和plt.yticks
+5. x轴和y轴的label plt.xlabel和plt.ylabel
+6. 图片标题,plt.title
+7. 绘制多个图形, 多次调用plt.plot 即可
+8. 绘制网格并调整透明度,plt.grid()
+9. 添加图例, plt.legend()
+10. 设置字体 font_manager.FontProperties()方法
+
+** 问题
+*** TODO 中文乱码
+    fc-list 命令查看系统习题
+    fc-list :lang=zh 查看系统的中文字体
+    
+    通过修改matplotlib.rc,可以修改默认字体
+* 散点图
+
+plt.scatter(x, y)
+
+其他方法和折线图的方法都相同
+* 条形图
+1. plt.bar() 绘制普通的条形图,竖着的
+2. plt.barh() 绘制横着的条形图
+
+其他和折线图一致
+* 直方图
+
+plt.hist(x, num_bins)
+
+x是所有的原始数据，num_bins是组距(x距离多远分一组)
+
+直方图只能绘制未统计的原始数据,如果需要绘制统计过的数据，只能用条形图模拟直方图了
