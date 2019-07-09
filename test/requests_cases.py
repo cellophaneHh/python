@@ -3,31 +3,33 @@
 '''
 import requests
 import json
-from lxml import etree
 
-
-def get_proxy():
-    # return 'socks5://127.0.0.1:1080'
-    r = requests.get('http://193.112.95.23:5010/get/')
-    if r.status_code == 200:
-        return r.text
-
-
-proxy = get_proxy()
-proxies = {
-    'http': proxy,
-    'https': proxy,
+header = {
+    "user-agent":
+    "Mozilla/5.0 (X11; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0",
+    "host": "baike.baidu.com",
+    "accept":
+    "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "accept-language":
+    "zh-CN,en-US;q=0.8,zh;q=0.7,zh-TW;q=0.5,zh-HK;q=0.3,en;q=0.2",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "upgrade-insecure_requests": "1",
+    "cache-control": 'max-age=0',
 }
-headers = {
-    'user-agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'
+
+url = "https://baike.baidu.com/wikitag/api/getlemmas"
+params = {
+    "limit": 24,
+    "timeout": 3000,
+    "filterTags": [],
+    "tagId": 76607,
+    "fromLemma": False,
+    "contentLength": 40,
+    "page": 1
 }
-session = requests.Session()
-print(session.headers)
-print(proxies)
-r = session.get('http://www.beautylegmm.com/photo/beautyleg/2018/1673/beautyleg-1673-0001.jpg',
-                proxies=proxies, headers=headers, timeout=5)
-print('1')
-if r.status_code == 200:
-    print('ok...')
-else:
-    print('failure...')
+
+res = requests.post(url, data=params, headers=header)
+if res.status_code == 200:
+    jsonresult = json.loads(res.text)
+    print(jsonresult["lemmaList"][0])

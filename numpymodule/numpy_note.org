@@ -1,0 +1,44 @@
+#+title: numpy
+
+** 新建数组
+np.array()
+np.arange()
+
+** 形状
+array.shape
+arra.reshape((x,y))
+
+** 广播原则
+
+如果两个数组的后缘维度, 即从末尾开始算起的维度，的轴长度相符或其中一方的长度为1,
+则认为他们是广播兼容的。广播会在确实和长度为1的维度上进行。
+
+比如(3, 3, 2) 和(3, 3)是不能计算的，
+(3, 3, 2) 和 (3, 2)是可以计算的。
+
+** 总结
+1. 如何选择一行或者多行的数据(列)?
+   t[2], t[2,:], t[2:,3:], t[:, [2, 4]]
+2. 赋值
+   t[2:, 3] = 3
+3. 如何把大于10的替换为10
+   t[t>10] = 3
+4. np.where三元运算符使用
+   np.where(t>10, 20, 1)  将t中大于10的替换为20，其他的替换为1
+5. 裁剪t.clip(min, max)
+   将数组中小于min的替换为min，大于max替换为max
+6. 转置
+   t.T
+   t.transpose()
+7. 读取csv中的数据
+   np.loadtxt(filepath, delimiter=',', dtype=int)
+8. nan和inf
+   nan 不是一个数字
+   inf 无穷
+9. 常用统计函数
+   t.sum(axis=0)
+   np.median()
+   t.max()
+   t.mean(axis=0)
+   t.std 标准差
+   np.ptp 极差   

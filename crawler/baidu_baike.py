@@ -126,6 +126,7 @@ class BaiduBaike:
             status = response.status
             response.encoding = 'utf-8'
             if status == 200:
+
                 return await response.text()
             log.error("下载失败: {} {}".format(url, status))
 
@@ -154,7 +155,7 @@ class BaiduBaike:
         while True:
             try:
                 url = await self.detail_urls_queue.get()
-                log.info("url出队: {}".format(url))
+                # log.info("url出队: {}".format(url))
                 self.detail_urls_queue.task_done()
                 if self.__detail_html_source_exists(url):
                     continue
@@ -193,7 +194,7 @@ class BaiduBaike:
             cursor = db.baike_detail_urls_raw.find(batch_size=5000)
             for doc in cursor:
                 url = doc['url']
-                log.info("url入队: {}".format(url))
+                # log.info("url入队: {}".format(url))
                 await self.detail_urls_queue.put(url)
             log.info('queue_size: {}'.format(self.detail_urls_queue.qsize()))
 

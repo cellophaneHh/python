@@ -1,0 +1,44 @@
+#+title: pandas
+
+* 为什么学习pandas
+  numpy可以处理数值型数据，pandas除了可以帮我们处理数值型数据(基于numpy)
+  还可以帮我们处理字符串，时间序列等其他类型的数据
+
+
+* 数据类型
+
+1. Series 一维，带标签数组
+2. DataFrame 二维，Series容器
+
+* 常用操作
+  1. 行列label, index  columns
+  2. 概览， describe info
+  3. 取前/后几行 head  tail
+  4. str.split().tolist()
+* 排序
+  sort_values(by='字段名')方法
+
+* 取行或者取列
+*** 第一种方式
+1. 方括号内写数字, 结果还是dataframe, d1[:2]
+2. 取某一列,方括号内写字符串列名, 结果是series，d1['name']
+*** 第二种方式，pandas中优化过的两种方式
+1. d1.loc, 通过 *标签* 索引数据, 'a':'c' 会包含c
+2. d1.iloc, 通过 *位置* 获取数据, 0:1 不会包含1
+
+* 布尔索引
+
+1. 取满足某些条件的数据, d1[(d1['value'] > 20) & (d1['value'] < 150)]
+
+
+
+* 常用统计方法
+
+平均值: mean()
+最大值: max()
+排重: unique()
+
+* 数据合并
+
+join 将行索引相同的数据合并到一起
+merge 按照制定的列把数据按照一定的方式合并到一起
