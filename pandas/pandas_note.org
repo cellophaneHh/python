@@ -42,3 +42,18 @@
 
 join 将行索引相同的数据合并到一起
 merge 按照制定的列把数据按照一定的方式合并到一起
+
+* 分组和聚合
+
+ grouped = groupby(by='column_name')
+ grouped是一个元组，0是列名，1是一个DataFrame
+
+1. 数据按照多个条件进行分组, series进行groupby
+
+   grouped = df['value'].groupby(by=[df['name'], df['desc']])
+
+* tips
+ 
+  df是一个DataFrame
+  df['name'] 取一列，结果是Series
+  df[ ['name'] ] 取一列，结果是DataFrame

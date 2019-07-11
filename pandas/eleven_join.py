@@ -1,6 +1,5 @@
 '''
-数组合并join
-类似sql中的left join,调用方为主，另一方多的行丢弃，不存在的列为nan
+数组合并join, 按照列索引
 '''
 import numpy as np
 import pandas as pd
