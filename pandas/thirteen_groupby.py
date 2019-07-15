@@ -2,7 +2,6 @@
 pandas中的分组和聚合
 '''
 import pandas as pd
-import numpy as np
 
 file_path = "./data1.csv"
 
@@ -25,6 +24,9 @@ name_count = grouped['name'].count()
 print(name_count)
 print(name_count['z1'])
 print(name_count['z2'])
+value_count = grouped['value'].count()
+print(value_count)
+print(grouped['value'].mean())
 
 # 数据按照多个条件进行分组, series进行groupby
 grouped = df['value'].groupby(by=[df['name'], df['desc']])

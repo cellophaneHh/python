@@ -31,7 +31,6 @@
 1. 取满足某些条件的数据, d1[(d1['value'] > 20) & (d1['value'] < 150)]
 
 
-
 * 常用统计方法
 
 平均值: mean()
@@ -41,7 +40,7 @@
 * 数据合并
 
 join 将行索引相同的数据合并到一起
-merge 按照制定的列把数据按照一定的方式合并到一起
+merge 按照指定的列把数据按照一定的方式合并到一起, 和sql的类似
 
 * 分组和聚合
 
@@ -52,8 +51,17 @@ merge 按照制定的列把数据按照一定的方式合并到一起
 
    grouped = df['value'].groupby(by=[df['name'], df['desc']])
 
+2. 聚合方法,mean(), count()...
 * tips
  
   df是一个DataFrame
   df['name'] 取一列，结果是Series
   df[ ['name'] ] 取一列，结果是DataFrame
+* 索引和复合索引
+
+1. 索引， index
+2. 指定索引, df.index=['x', 'y']
+3. 取原数据中指定索引的数据并重新设置索引，df.reindex(list('abcd'))
+4. 指定某一列作为index, df.set_index('name', drop=False)
+5. 返回索引的唯一值, df.set_index('name').index_unique()??
+6. 从里层索引取值, df.swaplevel().loc('a')
