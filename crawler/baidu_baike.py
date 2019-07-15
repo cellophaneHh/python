@@ -126,7 +126,6 @@ class BaiduBaike:
             status = response.status
             response.encoding = 'utf-8'
             if status == 200:
-
                 return await response.text()
             log.error("下载失败: {} {}".format(url, status))
 

@@ -1,14 +1,19 @@
 import scrapy
 
 
-class BlogSpider(scrapy.Spider):
-    name = 'blogspider'
-    start_urls = ['https://blog.scrapinghub.com']
+class mingyanSpider(scrapy.Spider):
+    name = "quotes"
+    start_urls = [
+        'http://lab.scrapyd.cn/',
+    ]
 
     def parse(self, response):
-        print(type(response))
-        for title in response.css('.post-header>h2'):
-            yield {'title': title.css('a ::text').extract_first()}
+        for quote in response.css('div.quote'):
+            yield {
+                '内容': quote.css('span.text::text').extract_first(),
+                '作者': quote.xpath('span/small/text()').extract_first(),
+            }
 
-        for next_page in response.css('div.prev-post > a'):
-            yield response.follow(next_page, self.parse)
+        next_page = response.css('li.next a::attr("href")').extract_first()
+        if next_page is not None:
+            yield scrapy.Request(next_page, self.parse)
