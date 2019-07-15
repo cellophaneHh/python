@@ -8,6 +8,7 @@ import os
 import urllib
 import asyncio
 import aiohttp
+from compress_util import Compress as compress
 
 log = LogHandler("baidubaike")
 
@@ -162,15 +163,17 @@ class BaiduBaike:
                 try:
                     html_source = await self.__download(url)
                     if html_source:
+                        compress_html_source = compress.compress_str(
+                            html_source)
                         await asyncio.ensure_future(
                             self.__extend_detail_urls(url, html_source))
-                        db.baike_detail_html_source.update_one(
-                            {"url": url},
-                            {"$set": {
+                        db.baike_detail_html_source.update_one({"url": url}, {
+                            "$set": {
                                 "url": url,
-                                "html_source": html_source
-                            }},
-                            upsert=True)
+                                "html_source": compress_html_source
+                            }
+                        },
+                                                               upsert=True)
                         self.__detail_html_source_add(url)
                 except Exception as e:
                     log.error("采集失败: {}, {}".format(url, repr(e)))
