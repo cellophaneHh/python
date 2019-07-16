@@ -4,7 +4,6 @@
   numpy可以处理数值型数据，pandas除了可以帮我们处理数值型数据(基于numpy)
   还可以帮我们处理字符串，时间序列等其他类型的数据
 
-
 * 数据类型
 
 1. Series 一维，带标签数组
@@ -29,7 +28,6 @@
 * 布尔索引
 
 1. 取满足某些条件的数据, d1[(d1['value'] > 20) & (d1['value'] < 150)]
-
 
 * 常用统计方法
 
@@ -65,3 +63,8 @@ merge 按照指定的列把数据按照一定的方式合并到一起, 和sql的
 4. 指定某一列作为index, df.set_index('name', drop=False)
 5. 返回索引的唯一值, df.set_index('name').index_unique()??
 6. 从里层索引取值, df.swaplevel().loc('a')
+* 时间序列
+  date_range() 获得时间序列
+  to_datetime() 将字符串转换为时间类型
+  如果数据索引是时间序列，可以通过resample('M')，重采样之后可以求平均值mean()，求个数count()等
+  

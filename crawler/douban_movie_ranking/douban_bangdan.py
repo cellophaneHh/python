@@ -33,11 +33,14 @@ class DouBanMovieRanking:
         """源码下载"""
         content = ""
         if not force_download and not self.__exist(key, url):
-            res = self.session.get(url)
+            res = self.session.get(url, timeout=5)
             res.encoding = "utf8"
             if res.status_code == 200:
                 redis_client.hset(key, url, res.text)
                 content = res.text
+            else:
+                print(res.reason)
+            print('{}, {}'.format(url, res.status_code))
         else:
             content = redis_client.hget(key, url)
         return content
@@ -59,17 +62,21 @@ class DouBanMovieRanking:
         urls = []
         urls.extend(self.__week_ranking_url())
         urls.extend(self.__north_american_ranking_url())
-
+        print(len(urls))
         for url in urls:
             if not self.__exist(html_source_detail, url):
+                print('url: {}'.format(url))
                 html = etree.HTML(self.__html_source(html_source_detail, url))
+                print('url: {} finished'.format(url))
                 movieDetail = {}
                 for name, xpath in movieInfoConfig.items():
                     movieDetail[name] = html.xpath(xpath)
                     redis_client.hset(
                         movie_info, url,
                         json.dumps(movieDetail, ensure_ascii=False))
-                    time.sleep(4)
+                time.sleep(4)
+            else:
+                print('exists: {}'.format(url))
 
 
 dbr = DouBanMovieRanking()
