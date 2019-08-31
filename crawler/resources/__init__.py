@@ -1,2 +1,1 @@
-
-__all__=["settings", "user_agent"]
+__all__ = ['settings', 'user_agent']

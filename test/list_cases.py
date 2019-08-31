@@ -1,4 +1,7 @@
-def logwrapper(level='info') -> (str):
+from typing import Callable
+
+
+def logwrapper(level='info') -> Callable:
     print('level: {}'.format(level))
 
     def log(func):
@@ -18,5 +21,5 @@ def func(*params):
     print(params)
 
 
-l = [1, 2, 3]
-func(*l)
+my_list = [1, 2, 3]
+func(*my_list)
