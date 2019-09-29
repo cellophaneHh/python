@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-# from selenium.webdriver.common.keys import Keys
 import time
 import traceback
 import sys
@@ -30,28 +29,30 @@ class NeteaseLogin:
         self.netease_home = "https://music.163.com/"
         self.driver_path = os.getcwd() + "/driver/geckodriver"
 
-
     def login_netease(self):
         # 修改默认user-agent
         profile = webdriver.FirefoxProfile()
-        profile.set_preference('general.useragent.override', user_agent.USER_AGENT_FIREFOX)
+        profile.set_preference('general.useragent.override',
+                               user_agent.USER_AGENT_FIREFOX)
         options = Options()
         # options.add_argument('-headless')
 
         browser = webdriver.Firefox(executable_path=self.driver_path,
-                                    firefox_profile=profile, firefox_options=options)
+                                    firefox_profile=profile,
+                                    firefox_options=options)
         browser.get(self.netease_home)
         # 鼠标悬停元素
         xpath_login_ele = "//a[@data-action='login' and contains(text(), '登录')]"
         try:
             # 去掉selenium特征,window.navigator.webdriver为true改为false
-            browser.execute_script("Object.defineProperties(navigator, {webdriver: {get:function(){return false}}})")
+            browser.execute_script(
+                "Object.defineProperties(navigator, {webdriver: {get:function(){return false}}})"
+            )
             print(browser.execute_script('window.navigator.webdriver'))
             print("-----------------")
             # 等待登录标记出现
             WebDriverWait(browser, 10).until(
-                EC.presence_of_element_located((By.XPATH, xpath_login_ele))
-            )
+                EC.presence_of_element_located((By.XPATH, xpath_login_ele)))
             # TODO 打开控制台,没成功
             # browser.find_element_by_tag_name("body").send_keys(Keys.CONTROL + Keys.SHIFT + "k")
             # time.sleep(2)
@@ -73,7 +74,6 @@ class NeteaseLogin:
             print('登录失败..')
         finally:
             browser.quit()
-
 
     def _login_email(self, browser):
         '''邮箱登录方式'''
@@ -105,7 +105,6 @@ class NeteaseLogin:
         login_button.click()
         time.sleep(5)
 
-
     def _login_sina(self, browser):
         '''新浪微博登录方式'''
         # 微博登录链接, 用于打开新浪微博授权登录页面
@@ -120,8 +119,7 @@ class NeteaseLogin:
         browser.switch_to.window(windows[-1])
         #等待登录框出现
         WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.ID, "userId"))
-        )
+            EC.presence_of_element_located((By.ID, "userId")))
         # 偶尔会出现placeholder没有清空的问题
         time.sleep(0.5)
         # 输入邮箱
@@ -143,7 +141,6 @@ class NeteaseLogin:
         windows = browser.window_handles
         browser.switch_to.window(windows[0])
 
-
     def __repr__(self):
         return '{logintype:' + self.logintype + ', username:' + self.username + "}"
 
@@ -158,4 +155,3 @@ if __name__ == '__main__':
         nl.login_netease()
     else:
         print("需要输入登录类型(email或者sina), 登录名，密码")
-
