@@ -1,3 +1,6 @@
+'''
+可重入锁threading.RLock()
+'''
 import threading
 
 # my_lock = threading.Lock() 换为可重入锁
@@ -5,7 +8,6 @@ my_lock = threading.RLock()
 
 
 class MyThread(threading.Thread):
-
     def run(self):
         self.show_recursion(1)
 

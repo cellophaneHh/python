@@ -25,16 +25,13 @@ def stage_2(cond):
 
 if __name__ == '__main__':
     condition = multiprocessing.Condition()
-    s1 = multiprocessing.Process(name='s1',
-                                 target=stage_1,
-                                 args=(condition,))
+    s1 = multiprocessing.Process(name='s1', target=stage_1, args=(condition, ))
     s2_clients = [
         multiprocessing.Process(
             name='stage_2[{}]'.format(i),
             target=stage_2,
-            args=(condition,),
-        )
-        for i in range(1, 3)
+            args=(condition, ),
+        ) for i in range(1, 3)
     ]
     for c in s2_clients:
         c.start()

@@ -3,7 +3,6 @@ import time
 
 
 class Consumer(multiprocessing.Process):
-
     def __init__(self, task_queue, result_queue):
         multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
@@ -30,8 +29,9 @@ class Task:
 
     def __call__(self):
         time.sleep(0.1)
-        return '{self.a} * {self.b} = {product}'.format(
-            self=self, product=self.a * self.b)
+        return '{self.a} * {self.b} = {product}'.format(self=self,
+                                                        product=self.a *
+                                                        self.b)
 
     def __str__(self):
         return '{self.a} * {self.b}'.format(self=self)
@@ -43,10 +43,7 @@ if __name__ == '__main__':
 
     num_consumers = multiprocessing.cpu_count() * 2
     print('Creating {} consumers'.format(num_consumers))
-    consumers = [
-        Consumer(tasks, results)
-        for i in range(num_consumers)
-    ]
+    consumers = [Consumer(tasks, results) for i in range(num_consumers)]
     for w in consumers:
         w.start()
 

@@ -31,5 +31,5 @@ show_value(local_data)
 local_data.value = 1000
 show_value(local_data)
 for i in range(2):
-    t = threading.Thread(target=worker, args=(local_data,))
+    t = threading.Thread(target=worker, args=(local_data, ))
     t.start()

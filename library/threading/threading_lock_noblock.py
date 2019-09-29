@@ -1,3 +1,6 @@
+'''
+acquire(blocking=True, timeout=-1)
+'''
 import logging
 import threading
 import time
@@ -23,38 +26,37 @@ def worker(lock):
     while num_acquires < 3:
         time.sleep(0.5)
         logging.debug('Trying to acquire')
-        have_it = lock.acquire(0)
+        have_it = lock.acquire(False)
         try:
             num_tries += 1
             if have_it:
-                logging.debug('Iteration %d: Acquired',
-                              num_tries)
+                logging.debug('Iteration %d: Acquired', num_tries)
             else:
-                logging.debug('Iteration %d: Not acquired',
-                              num_tries)
+                logging.debug('Iteration %d: Not acquired', num_tries)
+            if num_tries > 10:
+                break
         finally:
             if have_it:
                 lock.release()
     logging.debug('Done after %d iterations', num_tries)
 
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='(%(threadName)-10s) %(message)s')
+logging.basicConfig(level=logging.DEBUG,
+                    format='(%(threadName)-10s) %(message)s')
 
 lock = threading.Lock()
 
-holder = threading.Thread(
-    target=lock_holder,
-    args=(lock,),
-    name='LockHolder',
-    daemon=True,
-)
-holder.start()
+# holder = threading.Thread(
+#     target=lock_holder,
+#     args=(lock,),
+#     name='LockHolder',
+#     daemon=True,
+# )
 
 worker = threading.Thread(
     target=worker,
-    args=(lock,),
+    args=(lock, ),
     name='Worker',
 )
 worker.start()
+worker.join()

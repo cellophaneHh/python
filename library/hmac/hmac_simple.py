@@ -1,9 +1,8 @@
-
 import hmac
 
 disgest_maker = hmac.new(b'secret-shared-key-goes-here')
 
-with open('test.txt', 'rb') as f:
+with open('d:/private/python/library/hmac/test.txt', 'rb') as f:
     while True:
         block = f.read(1024)
         print(type(block))

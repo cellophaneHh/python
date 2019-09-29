@@ -1,14 +1,16 @@
 '''
 Condition和Event类似
 但是Event会唤醒所有等待的任务
-而Condition则可以通过notify(n)方法中的n参数控制唤醒的任务的数量
-                通过notify_all()方法唤醒所有的任务
+而Condition则可以通过notify(n)方法中的n参数控制唤醒的任务的数量。例如nofify(2)表示唤醒2个协程
+
+通过notify_all()方法唤醒所有的任务
 '''
 
 import asyncio
+import typing
 
 
-async def consumer(condition, n):
+async def consumer(condition, n) -> (asyncio.Condition, typing.SupportsInt):
     async with condition:
         print('consumer {} is waiting'.format(n))
         await condition.wait()
